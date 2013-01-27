@@ -39,7 +39,7 @@ int Ship::getSpeed() {
 
 void Ship::setSpeed(int agility) {
 	if (agility > MAX_SPEED) {
-		cout << "Error: Input needs to be lass than or equal to " << MAX_SPEED << endl;
+		cout << "Error: Input needs to be less than or equal to " << MAX_SPEED << endl;
 	}
 	else {
 		speed = agility;
