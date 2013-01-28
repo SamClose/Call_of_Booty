@@ -2,7 +2,6 @@
 #define SHIP_H
  
 class Ship {
- 
     // should  we create const numbers for maxHealth, maxSpeed, and maxAttack?
     #define MAX_HEALTH 100;
     #define MAX_SPEED 10;
@@ -30,13 +29,6 @@ class Ship {
         int shipCannonball();
         int shipChainShot();
         int shipScatterShot();
-        
-        // I don't know what to write for this
-				// maybe a random where:
-				// 			1 - failed escape stay for another turn
-				//      0 - escape
-				// then instead of void it will be int shipFlee();
-        void shipFlee();
 
     // Won't rewrite the explosive cannonball for other 
     private:
@@ -49,7 +41,9 @@ class Ship {
 				// should this be in inventory instead? since it adds to inventory.
         void raidShip();
 	      void lootShip();
-
+	
+	Inventory shipInventory;
+	Crew shipCrew;
         string shipName;
         int attack, health, speed;
 }
