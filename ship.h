@@ -1,6 +1,6 @@
 #ifndef SHIP_H
 #define SHIP_H
- 
+
 class Ship {
     // should  we create const numbers for maxHealth, maxSpeed, and maxAttack?
     #define MAX_HEALTH 100;
@@ -29,21 +29,25 @@ class Ship {
         int shipCannonball();
         int shipChainShot();
         int shipScatterShot();
+        
+        void shipUseItem(Item[]); // uses weapons and repair items
+        void crewUseItem(Item[]); // uses food and booze
 
-    // Won't rewrite the explosive cannonball for other 
     private:
         // Exclusive only to this class
         int shipExplosiveCannonball();
 
       	// Same things?
         // I'm not sure what to write for these
-				// parameter for ship to raid/loot on
-				// should this be in inventory instead? since it adds to inventory.
+	// parameter for ship to raid/loot on
+	// should this be in inventory instead? since it adds to inventory.
         void raidShip();
-	      void lootShip();
+	void lootShip();
 	
 	Inventory shipInventory;
 	Crew shipCrew;
         string shipName;
         int attack, health, speed;
-}
+};
+
+#endif
