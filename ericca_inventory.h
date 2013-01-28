@@ -1,11 +1,9 @@
 #ifndef INVENTORY_H
 #define INVENTORY_H
-#define MAX_SPACE 100;
-
-#include <iostream>
-using namespace std;
 
 class Inventory {
+	#define MAX_SPACE 100;
+	#define MIN_SPACE 0;
   	private:
 		// want to be able to display so user can see how much space is left
 		int filledSpace, emptySpace, foodSpace, ammoSpace, repairSpace;
@@ -15,7 +13,7 @@ class Inventory {
 	
 	public:
 		// sets filledSpace to 0
-    	Inventory();
+    		Inventory();
 		~Inventory();
 
 		// returns an integer value to change the space values
