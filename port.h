@@ -19,6 +19,9 @@ class Port{
 	//Allow player to sell goods from inventory to port in exchange for currency
 	void sell();
 	//Allow player to make repairs on ship, requires wood
+	//check ship inventory for wood
+	//ask player how much they want to repair the ship, based on current amount of wood and ship health
+	//missing ship health is max amount that can be repaired, unless there is less wood than that amount. 1wood=1health
 	void repair();
 	//Allow player to upgrade ship, increasing max health, crew space, inventory space, requires wood
 	void upgrade();
