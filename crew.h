@@ -1,6 +1,8 @@
 #ifndef CREW_H
 #define CREW_H
 
+using namespace std;
+
 class Crew {
 	private:
 		int crewNumber, mutinyLevel, happinesLevel;
@@ -21,4 +23,4 @@ class Crew {
 		// results would affect either the happinessLevel and/or mutinyLevel
 		void useItem(Inventory inventory);
 
-}
+};
