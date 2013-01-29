@@ -1,9 +1,11 @@
 #ifndef INVENTORY_H
 #define INVENTORY_H
 
+#define MAX_SPACE 100
+#define MIN_SPACE 0
+
 class Inventory {
-	#define MAX_SPACE 100;
-	#define MIN_SPACE 0;
+
   	private:
 		// want to be able to display so user can see how much space is left
 		int filledSpace, emptySpace, foodSpace, ammoSpace, repairSpace;
