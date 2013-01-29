@@ -27,7 +27,7 @@ class Crew {
 		void setHappinessLevel(int number);
 		
 		// results would affect either the happinessLevel and/or mutinyLevel
-		// uses set functions for mutiny and happiness levels
+		// uses set functions for mutiny and happiness levels with a ratio of crewNumber/MAX_something_LEVEL
 		// uses ship's inventory object
 		void crewUseItem(Inventory inventory);
 };
