@@ -1,13 +1,19 @@
 #ifndef CREW_H
 #define CREW_H
 
-using namespace std;
+#define MAX_MUTINY_LEVEL 100
+#define MIN_MUTINY_LEVEL 0
+#define MAX_HAPPY_LEVEL 100
+#define MAX_CREW_NUMBER 20 // not sure what number to put here
+#define MIN_CREW_NUMBER 5
 
 class Crew {
+	
 	private:
-		int crewNumber, mutinyLevel, happinesLevel;
+		int crewNumber, mutinyLevel, happinessLevel;
 
 	public:
+		// Initializes private data randomizes crewNumber?
 		Crew();
 		~Crew();
 
@@ -21,6 +27,9 @@ class Crew {
 		void setHappinessLevel(int number);
 		
 		// results would affect either the happinessLevel and/or mutinyLevel
-		void useItem(Inventory inventory);
-
+		// uses set functions for mutiny and happiness levels
+		// uses ship's inventory object
+		void crewUseItem(Inventory inventory);
 };
+
+#endif
