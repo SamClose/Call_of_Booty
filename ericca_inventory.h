@@ -19,10 +19,9 @@ class Inventory {
 		~Inventory();
 
 		// returns an integer value to change the space values
-		// takes an Item array
-		int addItem(Item inventorySpace[]);
-		int getItem(Item inventorySpace[]);
-		int useItem(Item inventorySpace[]);
+		int addItem();
+		int getItem();
+		int useItem();
 		
 		int getFilledSpace();
 		void setFilledSpace(int space);
@@ -42,4 +41,4 @@ class Inventory {
 		bool check();
 };
 
-#endif 
+#endif
