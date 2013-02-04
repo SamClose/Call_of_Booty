@@ -9,13 +9,6 @@ class Ship {
 	private:
     	// Exclusive only to this class
         int shipExplosiveCannonball();
-
-      	// Same things?
-        // I'm not sure what to write for these
-		// parameter for ship to raid/loot on
-		// should this be in inventory instead? since it adds to inventory.
-        void raidShip();
-		void lootShip();
 	
 		Inventory shipInventory;
 		Crew shipCrew;
