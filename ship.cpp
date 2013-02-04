@@ -4,11 +4,12 @@
 
 using namespace std;
 
-Ship::Ship() {
-	health = MAX_HEALTH;
-}
+Ship::Ship() { }
 
 ~Ship::Ship() {
+	health = 0;
+	shipInventory = ~Inventory();
+	shipCrew = ~Crew();
 }
 
 string Ship::getShipName() {
@@ -19,6 +20,22 @@ void Ship::setShipName(string name) {
 	shipName = name;
 }
 
+int Ship::getHealt() {
+	return health;
+}
+
+void Ship::setHealt(int hitPoints) {
+	if (hitPoints > MAX_HEALTH) {
+		cout << "Error: Health cannot be greater than " << MAX_HEALTH << endl;
+	}
+	else if (hitPoints < 0) {
+		cout << "Error: Health needs to be a positive integer." << endl;
+	}
+	else {
+		health = hitPoints;
+	}
+}
+
 int Ship::getAttack() {
 	return attack;
 }
@@ -26,7 +43,10 @@ int Ship::getAttack() {
 void Ship::setAttack(int shipAttack) {
 	// I don't even know if we should have these
 	if (shipAttack > MAX_ATTACK) {
-		cout << "Error: Input needs to be less than or equal to " << MAX_ATTACK << endl;
+		cout << "Error: Attack needs to be less than or equal to " << MAX_ATTACK << endl;
+	}
+	else if (shipAttack < 0) {
+		cout << "Error: Attack cannot be less than 0." << endl;
 	}
 	else {
 		attack = shipAttack;
@@ -39,7 +59,10 @@ int Ship::getSpeed() {
 
 void Ship::setSpeed(int agility) {
 	if (agility > MAX_SPEED) {
-		cout << "Error: Input needs to be less than or equal to " << MAX_SPEED << endl;
+		cout << "Error: Speed needs to be less than or equal to " << MAX_SPEED << endl;
+	}
+	else if (agility < 0) {
+		cout << "Error: Speed cannot be less than 0." << endl;
 	}
 	else {
 		speed = agility;
@@ -48,16 +71,31 @@ void Ship::setSpeed(int agility) {
 
 int Ship::shipCannonball() {
 	// return a randomized num or set a value?
+	return shipAttack;
 }
 
 int Ship::shipChainShot() {
-	// ^
+	return shipAttack/shipSpeed;
 }
 
 int Ship::shipScatterShot() {
-	// ^
+	return shipAttack/4;
 }
 
 int Ship::shipExplosiveCannonball() {
-	// ^
+	return health/2;
 }
+
+void Ship::shipAddItem(Item item) {
+	shipInventory.addItem(item);
+}
+
+void Ship::shipUseItem(Item item) {
+	shipInventory.useItem(item);
+}
+
+void Ship::crewUseItem(Item item) {
+	shipCrew.shipInventory.useItem(item);
+}
+
+/* End of ship.cpp */
