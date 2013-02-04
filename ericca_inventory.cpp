@@ -1,4 +1,8 @@
+// Add more includes if needed
+#include <iostream>
 #include "inventory.h"
+
+using namespace std;
 
 Inventory::Inventory() {
 	filledSpace = MIN_SPACE;
@@ -68,3 +72,5 @@ int Inventory::getEmptySpace() {
 void Inventory::setEmptySpace(int space) {
 	emptySpace = space;
 }
+
+/* End of inventory.cpp */
