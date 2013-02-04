@@ -1,6 +1,8 @@
 #ifndef INVENTORY_H
 #define INVENTORY_H
 
+#include "Item.cpp"
+
 #define MAX_SPACE 100
 #define MIN_SPACE 0
 
@@ -18,10 +20,9 @@ class Inventory {
     		Inventory();
 		~Inventory();
 
-		// returns an integer value to change the space values
-		int addItem();
-		int getItem();
-		int useItem();
+		// changes space values
+		void addItem(Item item);
+		void useItem(Item item);
 		
 		int getFilledSpace();
 		void setFilledSpace(int space);
