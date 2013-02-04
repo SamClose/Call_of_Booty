@@ -9,11 +9,12 @@ class Ship {
 	private:
     	// Exclusive only to this class
         int shipExplosiveCannonball();
-	
-		Inventory shipInventory;
-		Crew shipCrew;
+        
+        Inventory shipInventory;
+        Crew shipCrew;
+        
         string shipName;
-        int attack, health, speed;
+        int attack = MAX_ATTACK, health = MAX_HEALTH, speed = MAX_SPEED;
 
     // Other ships can have these public functions
     public:
@@ -38,8 +39,9 @@ class Ship {
         int shipChainShot();
         int shipScatterShot();
         
-        void shipUseItem(Item[]); // uses weapons and repair items
-        void crewUseItem(Item[]); // uses food and booze
+        void shipAddItem(Item item); // adds item to inventory
+        void shipUseItem(Item item); // uses weapons and repair items
+        void crewUseItem(Item item); // uses food and booze        
 };
 
 #endif
