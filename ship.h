@@ -14,12 +14,12 @@ class Ship {
         Crew shipCrew;
         
         string shipName;
-        int attack = MAX_ATTACK, health = MAX_HEALTH, speed = MAX_SPEED;
+        int attack, health, speed;
 
     // Other ships can have these public functions
     public:
         Ship(); // initializes some private values;
-        ~Ship(); // destructor sets everything to 0;
+        virtual ~Ship(); // destructor deallocation
 
         string getShipName();
         void setShipName(string input);
