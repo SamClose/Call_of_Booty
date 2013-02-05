@@ -10,10 +10,9 @@ Crew::Crew() {
 	crewNumber = MAX_CREW_NUMBER;
 }
 
-Crew::~Crew() {
-}
+virtual Crew::~Crew() { }
 
-void Crew::crewUseItem(Inventory inventory) {
+void Crew::crewUseItem(Item item) {
 }
 
 int Crew::getCrewNumber() {
@@ -41,4 +40,3 @@ void Crew::setHappinessLevel(int level) {
 }
 
 /* End of Crew.cpp */
-	
