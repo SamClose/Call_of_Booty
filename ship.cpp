@@ -99,7 +99,7 @@ void Ship::shipUseItem(Item item) {
 }
 
 void Ship::crewUseItem(Item item) {
-	shipCrew.shipInventory.useItem(item);
+	shipCrew.crewUseItem(item);
 }
 
 /* End of ship.cpp */
