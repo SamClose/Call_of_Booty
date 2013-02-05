@@ -28,7 +28,7 @@ int Ship::getHealt() {
 	return health;
 }
 
-void Ship::setHealt(int hitPoints) {
+void Ship::setHealth(int hitPoints) {
 	if (hitPoints > MAX_HEALTH) {
 		cout << "Error: Health cannot be greater than " << MAX_HEALTH << endl;
 	}
