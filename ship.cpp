@@ -4,7 +4,11 @@
 
 using namespace std;
 
-Ship::Ship() { }
+Ship::Ship() {
+	health = MAX_HEALTH;
+	attack = MAX_ATTACK;
+	speed = MAX_SPEED;
+}
 
 virtual ~Ship::Ship() {
 	health = 0;
