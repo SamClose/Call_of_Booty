@@ -13,9 +13,8 @@ class Crew {
 		int crewNumber, mutinyLevel, happinessLevel;
 
 	public:
-		// Initializes private data randomizes crewNumber?
-		Crew();
-		~Crew();
+		Crew(); // initializing attributes randomize crew number
+		virtual ~Crew();
 
 		int getCrewNumber();
 		void setCrewNumber(int number);
