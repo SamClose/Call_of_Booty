@@ -13,27 +13,16 @@ class EnemyShip : public Ship {
 	// 17 spaces for each attack item (minimum)
 	// 10 spaces for ship repair? or less
 	private:
-        string enemyShipName;
-        int enemyAttack, enemyHealth, enemySpeed;
-		Inventory shipInventory;
+		Inventory inventorySpace;
 
-    public:
-        EnemyShip();
-        ~EnemyShip(); // deallocates inventory
+    	public:
+        	EnemyShip();
+        	virtual ~EnemyShip(); // deallocates inventory
 
-        int getEnemyAttack();
-        void setEnemyAttack(int attack);
-
-        int getEnemyHealth();
-        void setEnemyHealth(int hitPoints);
-       
-        int getEnemySpeed();
-        void setEnemySpeed(int agility);
-
-        // cannonball, chainshot, scattershot
-        int shipCannonball();
-        int shipChainShot();
-        int shipScatterShot();
+	        // cannonball, chainshot, scattershot
+	        int shipCannonball();
+	        int shipChainShot();
+	        int shipScatterShot();	
 };
 
 #endif
