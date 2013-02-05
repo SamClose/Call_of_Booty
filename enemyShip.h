@@ -18,8 +18,8 @@ class EnemyShip : public Ship {
 		Inventory shipInventory;
 
     public:
-        EnemyPirate();
-        ~EnemyPirate(); // deallocates inventory
+        EnemyShip();
+        ~EnemyShip(); // deallocates inventory
 
         int getEnemyAttack();
         void setEnemyAttack(int attack);
