@@ -6,10 +6,10 @@ using namespace std;
 
 Ship::Ship() { }
 
-~Ship::Ship() {
+virtual ~Ship::Ship() {
 	health = 0;
-	shipInventory = ~Inventory();
-	shipCrew = ~Crew();
+	shipInventory.~Inventory();
+	shipCrew.~Crew();
 }
 
 string Ship::getShipName() {
@@ -71,15 +71,15 @@ void Ship::setSpeed(int agility) {
 
 int Ship::shipCannonball() {
 	// return a randomized num or set a value?
-	return shipAttack;
+	return attack;
 }
 
 int Ship::shipChainShot() {
-	return shipAttack/shipSpeed;
+	return attack/speed;
 }
 
 int Ship::shipScatterShot() {
-	return shipAttack/4;
+	return attack/4;
 }
 
 int Ship::shipExplosiveCannonball() {
