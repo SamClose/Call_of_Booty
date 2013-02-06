@@ -24,7 +24,7 @@ void Ship::setShipName(string name) {
 	shipName = name;
 }
 
-int Ship::getHealt() {
+int Ship::getHealth() {
 	return health;
 }
 
