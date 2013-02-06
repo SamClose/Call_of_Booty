@@ -24,12 +24,27 @@ void Inventory::addItem(Item item) {
 		}
 	}
 	else {
+		// System error print out
 		cout << "Error: Inventory is full!" << endl;
 	}
 }
 
 void Inventory::useItem(Item item) {
-	
+	Item temp;
+	int i = temp.getItem(inventorySpace, item);
+	temp.deleteItem(i, item);
+	setFilledSpace(getFilledSpace()--);
+	setEmptySpace(getEmptySpace()++);
+	if(item.getItemType() == "food") {
+		setFoodSpace(getFoodSpace()--);
+	}
+	else if (item.getItemType() == "weapon") {
+		setWeaponSpace(getWeaponSpace()--);
+	}
+	else if (item.getItemType() == "repair") {
+		setRepairSpace(getRepairSpace()--);
+	}
+		
 }
 
 // Get and set methods for attributes
@@ -49,12 +64,12 @@ void Inventory::setFoodSpace(int space) {
 	foodSpace = space;
 }
 
-int Inventory::getAmmoSpace() {
-	return ammoSpace;
+int Inventory::getReapairSpace() {
+	return repairSpace;
 }
 
-void Inventory::setAmmoSpace(int space) {
-	ammoSpace = space;
+void Inventory::setRepairSpace(int space) {
+	repairSpace = space;
 }
 
 int Inventory::getWeaponsSpace() {
