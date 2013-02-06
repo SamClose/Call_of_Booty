@@ -1,4 +1,3 @@
-
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include<allegro5/allegro_ttf.h>//this added
@@ -11,6 +10,7 @@ using namespace std;
 #define ScreenWidth 800
 #define ScreenHeight 600
 
+//rename to main.cpp to use. Currently interacts with button and introScreen
 int main(void)
 {
   ALLEGRO_DISPLAY *display; 
