@@ -10,7 +10,7 @@ class Inventory {
 
   	private:
 		// want to be able to display so user can see how much space is left
-		int filledSpace, emptySpace, foodSpace, ammoSpace, repairSpace;
+		int filledSpace, emptySpace, foodSpace, weaponSpace, repairSpace;
 
 		// using Item class to help create an array
 		Item inventorySpace[MAX_SPACE];
@@ -33,13 +33,11 @@ class Inventory {
 		int getFoodSpace();
 		void setFoodSpace(int space);
 		
-		int getAmmoSpace();
-		void setAmmoSpace(int space);
+		int getWeaponSpace();
+		void getWeaponSpace(int space);
 		
 		int getRepairSpace();
 		void setRepairSpace(int space);
-		
-		bool check();
 };
 
 #endif
