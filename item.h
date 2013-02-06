@@ -23,6 +23,8 @@ class Item {
 		// Looks for item and returns array position
 		int getItem(Item[] itemArray, Item item);
 
+		// Removes an item from itemArray
+		void deleteItem(Item[] itemArray, Item item);
 }
 
 #endif
