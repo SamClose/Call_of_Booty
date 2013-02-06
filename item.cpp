@@ -14,7 +14,7 @@ int Item::getItem(Item[] itemArray, Item item) {
 		else if (itemArray[i] != item) {
 			i++;
 		}
-		else if (i == itemArray.length - 1 && itemArray[itemArray.length-1] != item) {
+		else if (i == itemArray.size() - 1 && itemArray[itemArray.size()-1] != item) {
 			location = 0;
 			exit = true;
 		}
@@ -23,6 +23,14 @@ int Item::getItem(Item[] itemArray, Item item) {
 		cout << "Item not in array." << endl;
 	}
 	return location;
+}
+
+void Item::deleteItem(Item[] itemArray, Item item) {
+	Item temp;
+	int location = getItem(itemArray, item);
+	for(int i = 0; i <= location && i < itemArray.size(); i++) {
+		
+	}
 }
 
 string Item::getItemName() {
