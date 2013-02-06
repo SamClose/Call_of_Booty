@@ -31,8 +31,7 @@ void Inventory::addItem(Item item) {
 
 void Inventory::useItem(Item item) {
 	Item temp;
-	int i = temp.getItem(inventorySpace, item);
-	temp.deleteItem(i, item);
+	temp.deleteItem(inventorySpace, item);
 	setFilledSpace(getFilledSpace()--);
 	setEmptySpace(getEmptySpace()++);
 	if(item.getItemType() == "food") {
