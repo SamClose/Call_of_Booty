@@ -20,9 +20,8 @@ class Item {
 		string getItemType();
 		void setItemType();
 
-		// Checks to see if item is in array and compares itemType
-		// is there a more efficient way of doing this?
-		bool isThere(Item[] itemArray, Item item);
+		// Looks for item and returns array position
+		int getItem(Item[] itemArray, Item item);
 
 }
 
