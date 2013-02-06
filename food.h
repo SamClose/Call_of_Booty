@@ -7,9 +7,6 @@ class FoodItem : public Item {
 		int healthBonus, attackBonus;
 
 	public:	
-		Food();
-		virtual ~Food(); //so can call .~Food()
-		
 		int getHealthBonus();
 		void setHealthBonus(int bonus);
 		
