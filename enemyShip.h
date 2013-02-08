@@ -12,9 +12,6 @@ class EnemyShip : public Ship {
 	// Fills up 51 - 60 inventory spaces multiples of 3
 	// 17 spaces for each attack item (minimum)
 	// 10 spaces for ship repair? or less
-	private:
-		Inventory inventorySpace;
-
     	public:
         	EnemyShip();
         	virtual ~EnemyShip(); // deallocates inventory
