@@ -9,10 +9,6 @@ EnemyShip::EnemyShip() {
 	speed = MAX_ENEMY_SPEED;
 }
 
-virtual EnemyShip::~EnemyShip() {
-	inventorySpace.~Inventory(); // virtual call
-}
-
 int EnemyShip::shipCannonBall() {
 	return attack;
 }
