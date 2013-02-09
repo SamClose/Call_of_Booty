@@ -3,6 +3,9 @@
 
 #define MAX_HEALTH 1000
 #define MAX_ATTACK 100
+#define MIN_ATTACK 30
+#define MAX_SPEED 20
+#define MIN_SPEED 5
 
 class Boss {
 	private:
