@@ -1,8 +1,15 @@
 #include <stdlib.h>
 #include <time.h>
-
 #include "boss.h"
 using namespace std;
+
+#define MAX_HEALTH 1000
+#define MAX_ATTACK 100
+#define MIN_ATTACK 30
+#define MAX_DEFEND 20
+#define MIN_DEFEND 0
+#define MAX_SPEED 20
+#define MIN_SPEED 5
 
 Boss::Boss() {
 	health = MAX_HEALTH;
