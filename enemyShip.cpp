@@ -3,6 +3,11 @@
 
 using namespace std;
 
+// Values subject to change
+#define MAX_ENEMY_HEALTH 100
+#define MAX_ENEMY_ATTACK 20
+#define MAX_ENEMY_SPEED 10
+
 EnemyShip::EnemyShip() {
 	health = MAX_ENEMY_HEALTH;
 	attack = MAX_ENEMY_ATTACK;
