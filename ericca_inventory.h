@@ -13,7 +13,6 @@ class Inventory {
 		int filledSpace, emptySpace, foodSpace, weaponSpace, repairSpace;
 
 		// using Item class to help create an array
-		int item[3];
 		Item inventorySpace[MAX_SPACE];
 	
 	public:
@@ -23,7 +22,9 @@ class Inventory {
 
 		// changes space values
 		void addItem(Item item);
-		void useItem(Item item);
+		
+		// If return 0 print out on game, "Item doesn't exist in inventory."
+		int useItem(string itemType);
 		
 		int getFilledSpace();
 		void setFilledSpace(int space);
