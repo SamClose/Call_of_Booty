@@ -3,8 +3,14 @@
 #include <time.h>
 #incldue "shipBattle.h"
 
-ShipBattle::shipBattle(Ship mainShip, EnemyShip enemy) {
-	while(mainShip.getHealth() != 0 || enemy.getHealth() != 0) {
+ShipBattle::ShipBattle(Ship mainShip, EnemyShip enemyShip) {
+	this.main = mainShip;
+	this.enemy = enemyShip;
+	update();
+}
+
+void ShipBattle::shipBattle() {
+	while(main.getHealth() != 0 || enemy.getHealth() != 0) {
 		bool userTurn;
 		// takes in user input event
 		update(); // changes enemy stats on window
@@ -15,21 +21,24 @@ ShipBattle::shipBattle(Ship mainShip, EnemyShip enemy) {
 			int attack = 1 + rand()%3;
 			// enemy choices
 			switch(attack) {
-				case 1: mainShip.setHealth(mainShip.getHealth() - enemy.shipCannonball()); break;
-				case 2: mainShip.setHealth(mainShip.getHealth() - enemy.shipScatterShot()); break;
-				case 3: mainShip.setSpeed(mainShip.getSpeed() - enemy.shipChainShot());
+				case 1: main.setHealth(main.getHealth() - enemy.shipCannonball()); break;
+				case 2: main.setHealth(main.getHealth() - enemy.shipScatterShot()); break;
+				case 3: main.setSpeed(main.getSpeed() - enemy.shipChainShot());
 			}
 			update(); // changes mainShip stats on window
 		}
 	}
 }
 
-void ShipBattle::drawShipBattleFrame() {
-	// set new image
-}
-
 void ShipBattle::update() {
-	// redraws information displayed on frame.
+	// set new image
+	// mainShip's information
+	main.getShipName();
+	main.getShipHealth();
+	
+	// EnemyShip's information
+	enemy.getShipName();
+	enemy.getShipHealth();	
 }
 
 /* End of shipBattle.cpp */
