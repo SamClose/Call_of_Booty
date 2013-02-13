@@ -1,11 +1,6 @@
 #ifndef ENEMY_SHIP_H
 #define ENEMY_SHIP_H
 
-// Values subject to change
-#define MAX_ENEMY_HEALTH 100;
-#define MAX_ENEMY_ATTACK 20;
-#define MAX_ENEMY_SPEED 10;
-
 class EnemyShip : public Ship {
 	// Same useItem addItem as Ship
 	// No crew and no explosive cannonbal
