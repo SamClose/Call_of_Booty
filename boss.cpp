@@ -9,7 +9,7 @@ Boss::Boss() {
 	attack = MAX_ATTACK;
 }
 
-Boss::bossAttack() {
+int Boss::bossAttack() {
 	// ensures that it will truly be a random value not the same
 	srand(time(NULL));
 	// returns a number between MIN_ATTACK and attack
@@ -17,11 +17,33 @@ Boss::bossAttack() {
 }
 
 /* This attack slows down main character. */
-Boss::bossInk() {
+int Boss::bossSlime() {
 	srand(time(NULL));
 	// returns a number between MIN_SPEED and MAX_SPEED
 	return MIN_SPEED + rand()%(MAX_SPEED);
 }
+
+int Boss::fireBlast() {
+	srand(time(NULL));
+	return MIN_ATTACK + rand()%(attack*(2/3));
+}
+
+int Boss::waterBlast() {
+	srand(time(NULL)):
+	return MIN_ATTACK + rand()%(attack/3);
+}
+
+int Boss::defend() {
+	srand(time(NULL));
+	return MIN_DEF + rand()%(MAX_DEF);
+}
+
+void Boss::tidalWave() {
+	if(health != MAX_HEALTH) {
+		setBossHealth(health + 10);
+	}
+}
+
 
 string getBossName() {
 	return bossName;
