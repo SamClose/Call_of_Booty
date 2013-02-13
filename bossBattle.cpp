@@ -8,7 +8,7 @@
 BossBattle::BossBattle(Ship mainShip, Boss boss) {
 	this.main = mainShip;
 	this.boss = boss;
-	drawBossBattleFrame();
+	update();
 }
 
 void BossBattle::bossBattle() {
@@ -32,19 +32,8 @@ void BossBattle::bossBattle() {
 	}
 }
 
-void BossBattle::drawBossBattleFrame() {
-	// set image in window
-	// mainShip's information
-	main.getShipName();
-	main.getHealth();
-
-	// Boss's information
-	boss.getBossName();
-	boss.getBossHealth();
-}
-
 void BossBattle::update() {
-	// change image in window
+	// sets image in window
 	// mainShip's information
 	main.getShipName();
 	main.getHealth();
