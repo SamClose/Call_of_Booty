@@ -1,10 +1,6 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-#define MAX_HEALTH 100
-#define MAX_SPEED 10
-#define MAX_ATTACK 20
-
 class Ship { 
 	private:
     	// Exclusive only to this class
