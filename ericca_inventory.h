@@ -3,9 +3,6 @@
 
 #include "item.cpp"
 
-#define MAX_SPACE 100
-#define MIN_SPACE 0
-
 class Inventory {
 
   	private:
