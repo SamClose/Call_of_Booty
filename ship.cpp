@@ -1,8 +1,11 @@
 // add other includes to this if needed
 #include <iostream>
 #include "ship.h"
-
 using namespace std;
+
+#define MAX_HEALTH 100
+#define MAX_SPEED 10
+#define MAX_ATTACK 20
 
 Ship::Ship() {
 	health = MAX_HEALTH;
