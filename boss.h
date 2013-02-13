@@ -15,13 +15,21 @@ class Boss {
 	public:
 		Boss();
 
-		int bossAttack(); // use randomizer
-		int bossInk(); // slows down player i.e. decreases speed
+		// randomizer to return values
+		int bossAttack(); // bite animation
+		int bossSlime(); // slows down enemy can just turn dragon greener and do bite attack
+		int tidalWave(); // regenerates health do a water animation
+		int fireBlast(); // Fire attack animation
+		int waterBlast(); // change color of fire attack animation
+		// Comes up with a value to decrease an incoming attack.
+		int defend(int shipAttack); // boss just curls back its head or something
 		
+		// Getters
 		string getBossName();
 		int getHealth();
 		int getAttack();
 		
+		// Setters
 		void setBossName(string name);
 		void setHealth(int value);
 		void setAttack(int value);
