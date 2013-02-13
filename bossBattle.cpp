@@ -1,23 +1,57 @@
+// include necessary allegro5 libraries here
 #include <stdlib.h>
 #include <time.h>
 #include "bossBattle.h"
 
-BossBattle::bossBattle(Ship mainShip, Boss Nessy) {
-  while(mainShip.getHealth() != 0 || Nessy.getBossHealth() != 0) {
-    // needs to do an event thing. Wait for user then Boss attacks.
+// BossBattle finalBattle = new BossBattle(mainShip, Nessy);
+// finalBattle.bossBattle();
+BossBattle::BossBattle(Ship mainShip, Boss boss) {
+	this.main = mainShip;
+	this.boss = boss;
+	drawBossBattleFrame();
+}
 
-    // Boss switch cases
-    srand(time(NULL));
-    int attack = 1 + rand()%6;
-    switch(attack) {
-      case 1: mainShip.setHealth(mainShip.gethealth() - Nessy.bossAttack()); break;
-      case 2: mainShip.setHealth(mainShip.getHealth() - Nessy.fireBlast()); break;
-      case 3: mainShip.setHealth(mainShip.getHealth() - Nessy.waterBlast()); break;
-      case 4: mainShip.setSpeed(getSpeed() - Nessy.bossSlime()); break;
-      case 5: mainShip.setAttack(abs(mainShip.getAttack() - Nessy.defend())); break;
-      case 6: Nessy.tidalWave();
-    }
-  }
+void BossBattle::bossBattle() {
+	while(main.getHealth() != 0 || boss.getBossHealth() != 0) {
+		bool userTurn;
+		// takes in user input event
+		update(); // changes Boss stats
+	    // Boss attack
+	    if(!userTurn) {
+			srand(time(NULL));
+			int attack = 1 + rand()%6;
+			switch(attack) {
+				case 1: main.setHealth(main.gethealth() - boss.bossAttack()); break;
+				case 2: main.setHealth(main.getHealth() - boss.fireBlast()); break;
+				case 3: main.setHealth(main.getHealth() - boss.waterBlast()); break;
+				case 4: main.setSpeed(getSpeed() - boss.bossSlime()); break;
+				case 5: main.setAttack(abs(main.getAttack() - boss.defend())); break;
+				case 6: boss.tidalWave();
+			}
+	    }
+	}
+}
+
+void BossBattle::drawBossBattleFrame() {
+	// set image in window
+	// mainShip's information
+	main.getShipName();
+	main.getHealth();
+
+	// Boss's information
+	boss.getBossName();
+	boss.getBossHealth();
+}
+
+void BossBattle::update() {
+	// change image in window
+	// mainShip's information
+	main.getShipName();
+	main.getHealth();
+
+	// Boss's information
+	boss.getBossName();
+	boss.getBossHealth();
 }
 
 /* End of bossBattle.cpp */
