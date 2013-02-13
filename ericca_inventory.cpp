@@ -7,9 +7,12 @@ using namespace std;
 Inventory::Inventory() {
 	filledSpace = MIN_SPACE;
 	foodSpace = MIN_SPACE;
-	ammoSpace = MIN_SPACE;
+	repairSpace = MIN_SPACE;
 	weaponSpace = MIN_SPACE;
 	emptySpace = MAX_SPACE;
+	item[0] = repairSpace;
+	item[1] = foodSpace;
+	item[2] = weaponSpace;
 }
 
 Inventory::~Inventory() {
@@ -19,6 +22,15 @@ Inventory::~Inventory() {
 
 void Inventory::addItem(Item item) {
 	if (filledSpace != MAX_SPACE) {
+		if (item.getItemType() == "repair") {
+			item[0]++;
+		}
+		else if(item.getItemType() == "food") {
+			item[1]++;
+		}
+		else if (item.getItemType() == "weapon") {
+			item[2]++;
+		}
 		for(int i = 0; i < filledSpace; i++) {
 			inventorySpace[i] = item;
 		}
@@ -29,21 +41,57 @@ void Inventory::addItem(Item item) {
 	}
 }
 
-void Inventory::useItem(Item item) {
-	Item temp;
-	temp.deleteItem(inventorySpace, item);
-	setFilledSpace(getFilledSpace()--);
-	setEmptySpace(getEmptySpace()++);
-	if(item.getItemType() == "food") {
-		setFoodSpace(getFoodSpace()--);
+int Inventory::useItem(string itemType) {
+	// need to find a way to accept Item subclasses instead of just item.
+	if(filledSpace > MIN_SPACE) {
+		for(int i = 0; i < filledSpace; i++) {
+			if (inventorySpace[i].itemType == itemType) {
+				if(itemType == "repair" && repairSpace > 0) { // 1 bonus
+					Repair item;
+					return item.healthBonus;
+				}
+				else if (itemType == "food" && foodSpace > 0) { // 2 bonuses
+					Food item;
+					srand(time(NULL));
+					int n = 1 + rand()%2;
+					switch(n) {
+						case 1: return item.healthBonus;
+						case 2: return item.attackBonus;
+					}
+				}
+				else if (itemType == "weapon" && weaponSpace > 0) { // 2 bonuses
+					Weapon item;
+					srand(time(NULL));
+					int n = 1 + rand()%2;
+					switch(n) {
+						case 1: return item.attackBonus;
+						case 2: return item.speedBonus;
+					}
+				}
+				// getting rid of item from inventorySpace array
+				for(int index = i; index < filledSpace; index++) {
+					inventorySpace[index] = inventorySpace[index++];
+					inventorySpace[filledSpace - 1] = NULL;
+				}
+				filledSpace--;
+				emptySpace++;
+			}
+			// when iterator reaches the last Item
+			else if (inventorySpace[filledSpace - 1].itemType != itemType) {
+				// Print out on game: Item doesn't exist in inventory.
+				return 0;
+			}
+		}
 	}
-	else if (item.getItemType() == "weapon") {
-		setWeaponSpace(getWeaponSpace()--);
+	if(itemType == "repair") {
+		item[0]--;
 	}
-	else if (item.getItemType() == "repair") {
-		setRepairSpace(getRepairSpace()--);
+	else if (itemType == "food") {
+		item[1]--;
 	}
-		
+	else if (itemType == "weapon") {
+		item[2]--;
+	}
 }
 
 // Get and set methods for attributes
