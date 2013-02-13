@@ -9,22 +9,12 @@
 //			this is the simplest form to finish game
 //		repair: tools, wood (1 tool + 1 wood = % shipHealth)
 class Item {
-
 	private:
-		string itemName, itemType;
+		string itemType;
 
-	public:
-		string getItemName();
-		void setItemName();
-		
+	public:	
 		string getItemType();
 		void setItemType();
-
-		// Looks for item and returns array position
-		int getItem(Item[] itemArray, Item item);
-
-		// Removes an item from itemArray
-		void deleteItem(Item[] itemArray, Item item);
 }
 
 #endif
