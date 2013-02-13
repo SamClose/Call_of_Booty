@@ -14,9 +14,6 @@ class BossBattle {
         void bossBattle();
         
         // Draws both HP bars, both names, attack menu, inventory, and flee.
-        void drawBossBattleFrame();
-        
-        // Updates window after each turn.
         void update();
         
         // Just added these for semantics.
