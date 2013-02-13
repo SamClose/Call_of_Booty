@@ -4,6 +4,9 @@
 
 using namespace std;
 
+#define MAX_SPACE 100
+#define MIN_SPACE 0
+
 Inventory::Inventory() {
 	filledSpace = MIN_SPACE;
 	foodSpace = MIN_SPACE;
