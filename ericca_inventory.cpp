@@ -10,9 +10,6 @@ Inventory::Inventory() {
 	repairSpace = MIN_SPACE;
 	weaponSpace = MIN_SPACE;
 	emptySpace = MAX_SPACE;
-	item[0] = repairSpace;
-	item[1] = foodSpace;
-	item[2] = weaponSpace;
 }
 
 Inventory::~Inventory() {
@@ -23,21 +20,21 @@ Inventory::~Inventory() {
 void Inventory::addItem(Item item) {
 	if (filledSpace != MAX_SPACE) {
 		if (item.getItemType() == "repair") {
-			item[0]++;
+			repairSpace++;
 		}
 		else if(item.getItemType() == "food") {
-			item[1]++;
+			foodSpace++;
 		}
 		else if (item.getItemType() == "weapon") {
-			item[2]++;
+			weaponSpace++;
 		}
 		for(int i = 0; i < filledSpace; i++) {
 			inventorySpace[i] = item;
 		}
+		filledSpace++;
 	}
 	else {
-		// System error print out
-		cout << "Error: Inventory is full!" << endl;
+		// System error print out: "Error: Inventory is full!"
 	}
 }
 
