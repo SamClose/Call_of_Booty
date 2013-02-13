@@ -4,6 +4,12 @@
 
 using namespace std;
 
+#define MAX_MUTINY_LEVEL 100
+#define MIN_MUTINY_LEVEL 0
+#define MAX_HAPPY_LEVEL 100
+#define MAX_CREW_NUMBER 20 // not sure what number to put here
+#define MIN_CREW_NUMBER 5
+
 Crew::Crew() {
 	mutinyLevel = MIN_MUTINY_LEVEL;
 	happinessLevel = MAX_HAPPY_LEVEL;
