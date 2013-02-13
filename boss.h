@@ -1,14 +1,6 @@
 #ifndef BOSS_H
 #define BOSS_H
 
-#define MAX_HEALTH 1000
-#define MAX_ATTACK 100
-#define MIN_ATTACK 30
-#define MAX_DEFEND 20
-#define MIN_DEFEND 0
-#define MAX_SPEED 20
-#define MIN_SPEED 5
-
 class Boss {
 	private:
 		string bossName;
