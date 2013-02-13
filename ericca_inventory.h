@@ -13,8 +13,8 @@ class Inventory {
 		int filledSpace, emptySpace, foodSpace, weaponSpace, repairSpace;
 
 		// using Item class to help create an array
-		Item item[3];
-		int inventorySpace[MAX_SPACE];
+		int item[3];
+		Item inventorySpace[MAX_SPACE];
 	
 	public:
 		// sets filledSpace to 0
