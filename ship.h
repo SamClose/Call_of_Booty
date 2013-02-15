@@ -31,9 +31,9 @@ class Ship {
          
         // cannonball, chainshot, scattershot, explosive cannonball
         // returns a number to attack an enemy
-        int shipCannonball();
-        int shipChainShot();
-        int shipScatterShot();
+        int cannonball();
+        int chainShot();
+        int scatterShot();
         
         void addItem(Item item); // adds item to inventory
         void useItem(Item item); // uses item from inventory   
