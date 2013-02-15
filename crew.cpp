@@ -16,11 +16,6 @@ Crew::Crew() {
 	crewNumber = MAX_CREW_NUMBER;
 }
 
-virtual Crew::~Crew() { }
-
-void Crew::crewUseItem(Item item) {
-}
-
 int Crew::getCrewNumber() {
 	return crewNumber;
 }
