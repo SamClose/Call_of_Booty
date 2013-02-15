@@ -8,7 +8,6 @@ class Crew {
 
 	public:
 		Crew(); // initializing attributes randomize crew number
-		virtual ~Crew();
 
 		int getCrewNumber();
 		void setCrewNumber(int number);
