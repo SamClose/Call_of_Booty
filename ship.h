@@ -35,9 +35,8 @@ class Ship {
         int shipChainShot();
         int shipScatterShot();
         
-        void shipAddItem(Item item); // adds item to inventory
-        void shipUseItem(Item item); // uses weapons and repair items
-        void crewUseItem(Item item); // uses food and booze        
+        void addItem(Item item); // adds item to inventory
+        void useItem(Item item); // uses item from inventory   
 };
 
 #endif
