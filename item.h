@@ -10,12 +10,16 @@
 //		repair: tools, wood (1 tool + 1 wood = % shipHealth)
 class Item {
 	private:
+		string itemName;
 		string itemType;
 		int attackBonus, healthBonus, speedBonus;
 
 	public:	
+		string getItemName();
+		void setItemName(string name);
+
 		string getItemType();
-		void setItemType();
+		void setItemType(string name);
 		
 		int getAttackBonus();
 		void setAttackBonus(int bonus);
