@@ -11,10 +11,20 @@
 class Item {
 	private:
 		string itemType;
+		int attackBonus, healthBonus, speedBonus;
 
 	public:	
 		string getItemType();
 		void setItemType();
+		
+		int getAttackBonus();
+		void setAttackBonus(int bonus);
+		
+		int getHealthBonus();
+		void setHealthBonus(int bonus);
+		
+		int getSpeedBonus();
+		void setSpeedBonus(int bonus);
 }
 
 #endif
