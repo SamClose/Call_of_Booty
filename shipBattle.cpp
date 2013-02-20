@@ -1,4 +1,8 @@
 // include proper allegro5 libraries
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include <stdlib.h>
 #include <time.h>
 #incldue "shipBattle.h"
@@ -28,6 +32,15 @@ void ShipBattle::shipBattle() {
 			update(); // changes mainShip stats on window
 		}
 	}
+}
+
+void ShipBattle::drawShipBattle(ALLEGRO_DISPLAY *display) {
+	// draw shipBattle screen here.
+	al_init_font_addon();
+	al_init_ttf_addon();
+	al_init_primitives_addon();
+	al_install_keyboard();
+	al_install_mouse();
 }
 
 void ShipBattle::update() {
