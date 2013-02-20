@@ -1,4 +1,8 @@
 // include necessary allegro5 libraries here
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 #include <stdlib.h>
 #include <time.h>
 #include "bossBattle.h"
@@ -30,6 +34,15 @@ void BossBattle::bossBattle() {
 			}
 	    }
 	}
+}
+
+void BossBattle::drawBossBattle(ALLEGRO_DISPLAY *display) {
+	// code goes here to draw the bossBattle screen
+	// draw to display make constant backgrounds and need to implement code to allow mouse and keyboard interaction
+	al_init_font_addon();
+	al_init_ttf_addon();
+	al_install_keyboard();
+	al_install_mouse();
 }
 
 void BossBattle::update() {
