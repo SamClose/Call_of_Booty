@@ -5,7 +5,8 @@ class ShipBattle {
 
 	private:
 		Ship main;
-		Ship enemy;
+		EnemyShip enemy;
+		ALLEGRO_DISPLAY *display;
 
 	public:
 	        // Creates a ship battle
@@ -15,6 +16,7 @@ class ShipBattle {
 	        void shipBattle();
 	        
 	        // Draws both HP bars, names for both, attack menu, inventory menu, and flee.
+	        void drawShipBattle(ALLEGRO_DISPLAY *display);
 	       	void update();
 	        
 	        // Getters and Setters
@@ -23,6 +25,9 @@ class ShipBattle {
 	        
 	        EnemyShip getEnemyShip();
 	        void setEnemy(EnemyShip newEnemy);
+	        
+	        ALLEGRO_DISPLAY& getDisplay();
+	        void setDisplay(ALLEGRO_DISPLAY *display);
 
 }
 #endif
