@@ -80,12 +80,12 @@ void IntroScreen::makeIntroScreen(float ScreenWidth, float ScreenHeight){
 				{
 					setDone(true);
 					playGo = true;
-					al_draw_filled_rectangle(pos_x, pos_y,pos_x+15,pos_y+15,al_map_rgb(0,255,255));
+					//al_draw_filled_rectangle(pos_x, pos_y,pos_x+15,pos_y+15,al_map_rgb(0,255,255));
 				}
 				//How button~dimensions: x: 430 , y: 63
 				else if(pos_x >= 185 && pos_x <= 615 && pos_y >= 312 && pos_y<= 375)
 				{
-					al_draw_filled_rectangle(pos_x, pos_y,pos_x+15,pos_y+15,al_map_rgb(0,255,255));
+					//al_draw_filled_rectangle(pos_x, pos_y,pos_x+15,pos_y+15,al_map_rgb(0,255,255));
 					howGo = true;
 					setDone(true);
 				}
@@ -94,7 +94,7 @@ void IntroScreen::makeIntroScreen(float ScreenWidth, float ScreenHeight){
 				{
 					setExit(true);
 					setDone(true);
-					al_draw_filled_rectangle(pos_x, pos_y,pos_x+15,pos_y+15,al_map_rgb(0,255,255));
+					//al_draw_filled_rectangle(pos_x, pos_y,pos_x+15,pos_y+15,al_map_rgb(0,255,255));
 
 				}
 			}
