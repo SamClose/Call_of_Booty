@@ -11,6 +11,7 @@
 using namespace std;
 
 IntroScreen::IntroScreen(){
+	exists = true;
 }
 
 //draw "Call Of Booty" at top using a jpg or similar existing image
@@ -18,7 +19,9 @@ IntroScreen::IntroScreen(){
 void IntroScreen::makeIntroScreen(float ScreenWidth, float ScreenHeight){
 
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
-	
+	playGo = false;
+	howGo = false;
+	exit = false;
 	
 	//create 3 buttons for introscreen
 	//al_init_font_addon();
@@ -45,7 +48,7 @@ void IntroScreen::makeIntroScreen(float ScreenWidth, float ScreenHeight){
 
 	HowToPlay runHow;
 
-	bool done= false;
+	setDone(false);
 	int pos_x = ScreenWidth/2;
 	int pos_y = ScreenWidth/2;
 	event_queue = al_create_event_queue();
@@ -53,14 +56,14 @@ void IntroScreen::makeIntroScreen(float ScreenWidth, float ScreenHeight){
 	//al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue,al_get_mouse_event_source());
 	
-	while (!done)
+	while (!getDone())
 	{
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
 		if(ev.type ==ALLEGRO_EVENT_DISPLAY_CLOSE)
 		{
-			done= true;
+			setDone(true);
 		}
 		
 		else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES)
@@ -75,32 +78,78 @@ void IntroScreen::makeIntroScreen(float ScreenWidth, float ScreenHeight){
 				//Play button~dimensions: x: 365 , y: 65
 				if(pos_x >= 225 && pos_x <= 590 && pos_y >= 160 && pos_y<= 225)
 				{
+					setDone(true);
+					playGo = true;
 					al_draw_filled_rectangle(pos_x, pos_y,pos_x+15,pos_y+15,al_map_rgb(0,255,255));
 				}
-					//How button~dimensions: x: 430 , y: 63
+				//How button~dimensions: x: 430 , y: 63
 				else if(pos_x >= 185 && pos_x <= 615 && pos_y >= 312 && pos_y<= 375)
 				{
 					al_draw_filled_rectangle(pos_x, pos_y,pos_x+15,pos_y+15,al_map_rgb(0,255,255));
-					runHow.makeHowToPlayScreen();
+					howGo = true;
+					setDone(true);
 				}
-				//Exit button~dimensions: x:
+				//Exit button~dimensions: x: 396 y: 60
 				else if(pos_x >= 198 && pos_x <= 594 && pos_y >= 465 && pos_y<= 525)
 				{
-					done = true;
+					setExit(true);
+					setDone(true);
 					al_draw_filled_rectangle(pos_x, pos_y,pos_x+15,pos_y+15,al_map_rgb(0,255,255));
+
 				}
 			}
 			else if (ev.mouse.button & 2)
 			{
-			done = true;
+			setDone(true);
 			al_draw_filled_rectangle(pos_x, pos_y,pos_x+15,pos_y+15,al_map_rgb(255,0,0));
 			}
+			al_flip_display();
 		}
 		//al_draw_filled_rectangle(pos_x, pos_y,pos_x+30,pos_y+30,al_map_rgb(0,255,255));
-		al_flip_display();
+		//al_flip_display();
 		//al_clear_to_color(al_map_rgb(0,0,0));
 	}
 	
 	//al_destroy_display(display);
 
+}
+
+bool IntroScreen::getDone(){
+	return done;
+}
+
+void IntroScreen::setDone(bool doneValue){
+	done = doneValue;
+}
+
+bool IntroScreen::getExists(){
+	return exists;
+}
+
+void IntroScreen::setExists(bool existsValue){
+	exists = existsValue;
+}
+
+bool IntroScreen::getPlayGo(){
+	return playGo;
+}
+
+void IntroScreen::setPlayGo(bool playGoValue){
+	playGo = playGoValue;
+}
+
+bool IntroScreen::getHowGo(){
+	return howGo;
+}
+
+void IntroScreen::setHowGo(bool howGoValue){
+	howGo = howGoValue;
+}
+
+bool IntroScreen::getExit(){
+	return exit;
+}
+
+void IntroScreen::setExit(bool exitValue){
+	exit = exitValue;
 }
