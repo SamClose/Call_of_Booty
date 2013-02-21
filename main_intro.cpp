@@ -15,7 +15,10 @@ using namespace std;
 int main(void)
 {
   ALLEGRO_DISPLAY *display; 
-  //ALLEGRO_EVENT_QUEUE *event_queue = NULL;
+  bool introDone = false;
+  bool gameOn = true;
+  bool howScreenOn = false;
+  bool playGame = false;
 
 
 	if(!al_init()) //If allegro window does not initialize, error
@@ -41,49 +44,57 @@ int main(void)
 	al_install_mouse();
 	al_install_keyboard();
 
-	//Trying out introScreen:
 	IntroScreen introScreen;
-	introScreen.makeIntroScreen(ScreenWidth, ScreenHeight);
+	HowToPlay howScreen;
 
-	
-	/*bool done= false;
-	int pos_x = ScreenWidth/2;
-	int pos_y = ScreenWidth/2;
-	event_queue = al_create_event_queue();
-
-	al_register_event_source(event_queue, al_get_display_event_source(display));
-	al_register_event_source(event_queue,al_get_mouse_event_source());
-	
-	while (!done)
-	{
-		ALLEGRO_EVENT ev;
-		al_wait_for_event(event_queue, &ev);
-
-		if(ev.type ==ALLEGRO_EVENT_DISPLAY_CLOSE)
-		{
-			done= true;
-		}
+	while (gameOn){
+		while(!introDone){ // introscreen is active
 		
-		else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES)
-		{
-			pos_x = ev.mouse.x;
-			pos_y = ev.mouse.y;
-		}
-		al_draw_filled_rectangle(pos_x, pos_y,pos_x+30,pos_y+30,al_map_rgb(0,255,255));
-		al_flip_display();
-		al_clear_to_color(al_map_rgb(0,0,0));
-	}
-	*/
-	/*
-	ALLEGRO_FONT *font = al_load_font("Pirate.ttf", 36, NULL);
-	al_draw_text(font, al_map_rgb(255, 255, 0), ScreenWidth/2, 20, ALLEGRO_ALIGN_CENTRE, "Call of Booty");
-	al_draw_text(font, al_map_rgb(255,255,0), ScreenWidth/2, 200,ALLEGRO_ALIGN_CENTRE, "Play Game");
-	*/
-	////al_show_native_message_box(display, "MessageBox Title", "Error", "Display window could not be shown", NULL, ALLEGRO_MESSAGEBOX_ERROR);
-	//al_flip_display();
-	//al_rest(5.0);
-	//al_destroy_font(font);
-	al_destroy_display(display);//Destructor
 
+			if(introScreen.getExists()){
+				introScreen.makeIntroScreen(ScreenWidth, ScreenHeight);
+				if (introScreen.getDone())//introscreen has been told to close(play or exit)
+					introDone = true; //stops dealing with introScreen
+				if (introScreen.getPlayGo()){
+					introDone = true;
+					playGame = true;
+					gameOn = false;
+				}
+				if(introScreen.getExit())//exit has been clicked
+					gameOn = false;
+				if (introScreen.getHowGo()){//HowToPlay has been clicked
+					introDone = true;
+					howScreenOn = true;
+				}
+			}
+			if (gameOn == false){ //if exit has been clicked, end the program
+				break;
+			}
+			
+			
+		}
+		while(howScreenOn){ //loop for howScreen
+			while(introScreen.getHowGo()){
+						if (howScreen.getActive()){
+							howScreen.makeHowToPlayScreen();
+							if(howScreen.getHowDone()){
+								introScreen.setHowGo(false);
+								introDone = false;
+								howScreenOn = false;
+							}
+						}
+					}
+		}
+	//al_draw_filled_rectangle(0, 0,800,600,al_map_rgb(0,0,255)); //TEMPORARY filler for launch game~for now consider BlueScreen as the game
+	//al_flip_display();
+	//al_show_native_message_box(display, "MessageBox Title", "Error", "Display window could not be shown", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+	}
+	while (playGame){
+		al_draw_filled_rectangle(0, 0,800,600,al_map_rgb(0,0,255)); //TEMPORARY filler for launch game~for now consider BlueScreen as the game
+		al_flip_display();
+	}
+
+	al_destroy_display(display);//Destructor
+	
 	return 0;
 }
