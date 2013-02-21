@@ -10,8 +10,14 @@
 class HowToPlay{
 
 public:
-  HowToPlay();
+	HowToPlay();
 	void makeHowToPlayScreen();
-
+	bool getHowDone();
+	void setHowDone(bool doneValue);
+	bool getActive();
+	void setActive(bool activeValue);
+private:
+	bool howDone;
+	bool active;
 };
 #endif //HOW_TO_PLAY
