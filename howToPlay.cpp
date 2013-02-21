@@ -53,7 +53,7 @@ void HowToPlay::makeHowToPlayScreen(){
 			if (evH.mouse.button & 1)
 			{
 
-				al_draw_filled_rectangle(400, 300,415,315,al_map_rgb(255,255,0));
+				//al_draw_filled_rectangle(400, 300,415,315,al_map_rgb(255,255,0));
 				setHowDone(true);
 
 			}
