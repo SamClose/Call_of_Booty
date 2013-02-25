@@ -1,83 +1,164 @@
+
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_image.h>
-#include <allegro5/allegro_primitives.h>
+#include<allegro5/allegro_ttf.h>
+#include<allegro5/allegro_font.h>
+#include<allegro5/allegro_primitives.h>
+//#include <iostream>
 #include "Camera.h"
 #include "Player.h"
-#include <sstream>
-#include <iostream>
+#include "introScreen.h"
+
+//using namespace std;
 
 #define ScreenWidth 800
 #define ScreenHeight 600
 
-bool Collision(float x, float y, float ex, float ey, int width, int height)
+int top, bottom, left, right;
+
+bool Collision(ALLEGRO_BITMAP *player, ALLEGRO_BITMAP *enemy, 
+	float x, float y, float ex, float ey, int width, int height, float moveSpeed, int dir)
 {
-	if(x + width < ex || x > ex + width || y + height < ey || y > height + ey)
+	if(x + width < ex || x > ex + width || y + height < ey || y > ey + height)
 	{
 		return false;
 	}
-	return true;
+	else
+	{
+		top = max(y,ey);
+		bottom = min(y + height, ey + height); 
+		left = max(x, ex);
+		right = min(x + width, ex + width);
 
+		for(int i = top; i < bottom; i++)
+		{
+			for(int j = left; j < right; j++)
+			{
+				al_lock_bitmap(player, al_get_bitmap_format(player), ALLEGRO_LOCK_READONLY);
+				al_lock_bitmap(enemy, al_get_bitmap_format(enemy), ALLEGRO_LOCK_READONLY);
+				ALLEGRO_COLOR color = al_get_pixel(player, j - x, i - y);
+				ALLEGRO_COLOR color2 = al_get_pixel(enemy, j - ex, i - ey);
+
+				if(color.a != 0 && color2.a != 0)
+				{
+					//std::cout << "1: " << color.a << "," << "2: " << color2.a << std::endl;
+					if(dir == 0 || dir == 3)
+						moveSpeed = (i-y);
+					else
+						moveSpeed = (j-x);
+					return true;
+				}
+			}
+		}
+	}
+	return false;
 }
-
-
 
 int main(void)
 {
 	ALLEGRO_DISPLAY *display; 
-	bool done = false, draw = true, active = false; //boolean for done and drawing
-	int sourceX = 161, sourceY = 0;
+	bool gameOn = true; //bool for whether to keep the window open(game is running on any level)~basically Vinh's done variable
+	//booleans interacting with IntroScreen
+	bool introDone = false;//bool for whether introScreen is on
+	bool howScreenOn = false; //bool for whether to display the how to play screen
+	bool playGame = false; //bool to turn on the actual playable part of the game(ship movement)
+
+	bool draw = true; // bool for drawing ship
+	bool active = false;
+
+	int sourceX = 161, sourceY = 0; //points on bitmap
 	int state = NULL;
 	const float FPS = 30.0;
 
 	Camera mainCamera;
 	Player player1;
-	
 
-	if(!al_init()) //If allegro does not initialize, error			
+	if(!al_init()) //If allegro window does not initialize, error
 	{
 		al_show_native_message_box(NULL, NULL, NULL, "Could not initialize Allegro 5", NULL, NULL);
 		return -1; //Program ended with an error
 	}
 	
-	al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_RESIZABLE); //Sets the game window to be Windowed and Resizable
+	al_set_new_display_flags(ALLEGRO_WINDOWED);
 
-	display = al_create_display(800,600); //initializes display
+	display = al_create_display(ScreenWidth,ScreenHeight); //initializes display
 	al_set_window_title(display, "Call of Booty - Argh!"); //Sets the name of the game window
 
 	if(!display)
 	{
 		al_show_native_message_box(display, "Call of Booty", "Display Settings", "Display window cannot be created", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+		return -1;
 	}
-	
+
+	al_init_font_addon();
+	al_init_ttf_addon();
+	al_init_primitives_addon();
+	al_install_mouse();
 	al_install_keyboard();
 	al_init_image_addon();
 
-	int value = al_show_native_message_box(display, "Call of Booty", "Start Menu", "Do you want to play Call of Booty?", NULL, ALLEGRO_MESSAGEBOX_YES_NO);
-	if(value == 0)
-	{
-		done = true;
-	}
-
-
 	ALLEGRO_KEYBOARD_STATE keyState; //Gets the current state of keyboard
-	player1.player = al_load_bitmap("Boat2.png");
+	player1.player = al_load_bitmap("Boat.png");
 	ALLEGRO_BITMAP *background = al_load_bitmap("Background.png"); //Load background picture
-	ALLEGRO_BITMAP *player2 = al_load_bitmap("Boat.png");	
-	//al_convert_mask_to_alpha(player, al_map_rgb(0,255,255)); //Makes sprite background transparent
+	ALLEGRO_BITMAP *player2 = al_load_bitmap("Boat.png");
+
 	ALLEGRO_TIMER *timer = al_create_timer(1.0 / FPS);
 	ALLEGRO_EVENT_QUEUE *event_queue = al_create_event_queue();  //Creates a Queue for keypresses
 	al_register_event_source(event_queue, al_get_keyboard_event_source()); //Registers events from Keyboard
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 
-
 	al_start_timer(timer); //Starts the event timer
 
+	IntroScreen introScreen;
+	HowToPlay howScreen;
 
-	//BEGINNING OF THE GAME LOOP
-	while(!done)
-	{
+	while (gameOn){
+		while(!introDone){ // introscreen is active
+		
+
+			if(introScreen.getExists()){
+				introScreen.makeIntroScreen(ScreenWidth, ScreenHeight);
+				if (introScreen.getDone())//introscreen has been told to close(play or exit)
+					introDone = true; //stops dealing with introScreen
+				if (introScreen.getPlayGo()){
+					introDone = true;
+					playGame = true;
+					gameOn = false;
+				}
+				if(introScreen.getExit())//exit has been clicked
+					gameOn = false;
+				if (introScreen.getHowGo()){//HowToPlay has been clicked
+					introDone = true;
+					howScreenOn = true;
+				}
+			}
+			if (gameOn == false){ //if exit has been clicked, end the program
+				break;
+			}
+			
+			
+		}
+		while(howScreenOn){ //loop for howScreen
+			while(introScreen.getHowGo()){
+						if (howScreen.getActive()){
+							howScreen.makeHowToPlayScreen();
+							if(howScreen.getHowDone()){
+								introScreen.setHowGo(false);
+								introDone = false;
+								howScreenOn = false;
+							}
+						}
+					}
+		}
+	//al_draw_filled_rectangle(0, 0,800,600,al_map_rgb(0,0,255)); //TEMPORARY filler for launch game~for now consider BlueScreen as the game
+	//al_flip_display();
+	//al_show_native_message_box(display, "MessageBox Title", "Error", "Display window could not be shown", NULL, ALLEGRO_MESSAGEBOX_ERROR);
+	}
+	while (playGame){
+		//al_draw_filled_rectangle(0, 0,800,600,al_map_rgb(0,0,255)); //TEMPORARY filler for launch game~for now consider BlueScreen as the game
+		//al_flip_display();
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
 		al_get_keyboard_state(&keyState);
@@ -89,7 +170,7 @@ int main(void)
 			switch(events.keyboard.keycode)
 			{
 				case ALLEGRO_KEY_ESCAPE:
-				done = true;
+				playGame = false;
 			} 
 		}
 		
@@ -102,35 +183,52 @@ int main(void)
 			{
 				player1.y += player1.moveSpeed;
 				player1.dir = player1.DOWN;
-				//std::cout << "Y coordinate: " << player1.y << std::endl;
+				//std::cout << "DOWN: " << player1.DOWN << std::endl;
 			}
 			else if (al_key_down(&keyState, ALLEGRO_KEY_UP))
 			{
 				player1.y -= player1.moveSpeed;
 				player1.dir	= player1.UP;
-				//std::cout << "Y coordinate: " << player1.y << std::endl;
+				//std::cout << "UP: " << player1.UP << std::endl;
 			}
 			else if (al_key_down(&keyState, ALLEGRO_KEY_RIGHT))
 			{
 				player1.x += player1.moveSpeed;
 				player1.dir = player1.RIGHT;
-				//std::cout << "X coordinate: " << player1.x << std::endl;
+				//std::cout << "RIGHT: " << player1.RIGHT << std::endl;
 			}
 			else if (al_key_down(&keyState, ALLEGRO_KEY_LEFT))
 			{
 				player1.x -= player1.moveSpeed;
 				player1.dir = player1.LEFT;
-				//std::cout << "X coordinate: " << player1.x << std::endl;
+				//std::cout << "LEFT: " << player1.LEFT << std::endl;
 			}
 			//MOVEMENT WITH KEYBOARD
 			else
 			{
 				active = false; //KEY IS NOT BEING PRESSED
-				std::cout << player1.x << "," << player1.y << std::endl;
+				//std::cout << "X coordinate: " << player1.x << "," << "Y coordinate: " << player1.y << std::endl;
 			}
-
+			
 			//COLLISION DETECTION
-			if(Collision(player1.x, player1.y, 200, 300, 80.5, 80.5))
+			
+			if(Collision(player1.player, player2,player1.x, player1.y, 200, 200, 100, 100, player1.moveSpeed, player1.dir))
+			{
+				if(player1.dir == 0)
+					player1.y -= player1.moveSpeed;
+				else if (player1.dir == 1)
+					player1.x += player1.moveSpeed;
+				else if ( player1.dir == 2)
+					player1.x -= player1.moveSpeed;
+				else if (player1.dir == 3)
+					player1.y += player1.moveSpeed;
+
+				player1.moveSpeed = 5;
+				
+			}
+			
+			/*
+			if(Collision(player1.x, player1.y, 515, 260, 42, 21))
 			{
 				if(player1.dir == 0)
 					player1.y -= player1.moveSpeed;
@@ -141,19 +239,7 @@ int main(void)
 				else if (player1.dir == 3)
 					player1.y += player1.moveSpeed;
 			}
-			
-			else if(Collision(player1.x, player1.y, 515, 260, 42, 21))
-			{
-				if(player1.dir == 0)
-					player1.y -= player1.moveSpeed;
-				else if (player1.dir == 1)
-					player1.x += player1.moveSpeed;
-				else if ( player1.dir == 2)
-					player1.x -= player1.moveSpeed;
-				else if (player1.dir == 3)
-					player1.y += player1.moveSpeed;
-			}
-			
+			*/
 			
 
 			//COLLISION DETECTION
@@ -161,12 +247,11 @@ int main(void)
 	   //SCREENSCROLLING
 		//276,151
 		
-		std::cout << "cameraPositions: " << mainCamera.cameraPosition[0] << "," << mainCamera.cameraPosition[1] << std::endl;
-		mainCamera.CameraUpdate(mainCamera.cameraPosition, player1.x, player1.y, 102, 102, ScreenWidth, ScreenHeight);
+		//std::cout << "cameraPositions: " << mainCamera.cameraPosition[0] << "," << mainCamera.cameraPosition[1] << std::endl;
+		mainCamera.CameraUpdate(mainCamera.cameraPosition, player1.x, player1.y, 161, 161, ScreenWidth, ScreenHeight);
 		al_identity_transform(&mainCamera.camera);
 		al_translate_transform(&mainCamera.camera, -(mainCamera.cameraPosition[0]), -(mainCamera.cameraPosition[1]));
 		al_use_transform(&mainCamera.camera);
-
 	
 	  //SCREENSCROLLING
 
@@ -174,7 +259,7 @@ int main(void)
 			if(active)
 				sourceX += al_get_bitmap_width(player1.player) / 4;
 			else
-				sourceX = 102;
+				sourceX = 161;
 
 			if(sourceX >= al_get_bitmap_width(player1.player))
 				sourceX = 0;
@@ -188,9 +273,9 @@ int main(void)
 		 if (draw)
 		 {
 			al_draw_bitmap(background, 0, 0, NULL);
-			al_draw_bitmap_region(player2, 0, 0, 161, 161, 200, 300, NULL);
-			al_draw_bitmap_region(player1.player, sourceX, player1.dir*al_get_bitmap_height(player1.player) / 4, 102, 102, player1.x, player1.y, NULL);
-			
+			al_draw_bitmap_region(player2, 0, 0, 161, 161, 200, 200, NULL);
+			al_draw_bitmap_region(player1.player, sourceX, sourceY*al_get_bitmap_height(player1.player) / 4, 161, 161,
+				player1.x, player1.y, NULL);
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0));
 		 }
@@ -198,13 +283,13 @@ int main(void)
 		
 	}
 	//END OF THE GAME LOOP
-
-	al_destroy_display(display);//Destructor for Display
-	al_destroy_timer(timer);
-	al_destroy_bitmap(player1.player);
-	al_destroy_bitmap(background);
-	al_destroy_event_queue(event_queue);
 	
 
+	al_destroy_display(display);//Destructor
+	al_destroy_timer(timer);
+	al_destroy_bitmap(player1.player);
+	al_destroy_bitmap(player2);
+	al_destroy_bitmap(background);
+	al_destroy_event_queue(event_queue);
 	return 0;
 }
