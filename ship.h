@@ -1,42 +1,48 @@
 #ifndef SHIP_H
 #define SHIP_H
 
-class Ship { 
-	private:
-    	// Exclusive only to this class
-        int shipExplosiveCannonball();
-        
-        Inventory shipInventory;
-        Crew shipCrew;
-        
-        string shipName;
-        int attack, health, speed;
+#include "inventory.h"
+#include "crew.h"
+using namespace std;
+class Ship {
+private:
+	const int MAX_HEALTH = 100;
+	const int MAX_ATTACK = 20;
+	const int MAX_SPEED = 10;
 
-    // Other ships can have these public functions
-    public:
-        Ship(); // initializes some private values;
-        virtual ~Ship(); // destructor deallocation
+	int explosiveCannonball();
 
-        string getShipName();
-        void setShipName(string input);
+	Inventory shipInventory;
+	Crew shipCrew;
 
-        int getAttack();
-        void setAttack(int shipAttack);
-         
-        int getHealth();
-        void setHealth(int hitPoints);
-         
-        int getSpeed();
-        void setSpeed(int agility);
-         
-        // cannonball, chainshot, scattershot, explosive cannonball
-        // returns a number to attack an enemy
-        int cannonball();
-        int chainShot();
-        int scatterShot();
-        
-        void addItem(Item item); // adds item to inventory
-        void useItem(Item item); // uses item from inventory   
+	string shipName;
+	int attack, health, speed;
+
+public:
+	Ship();
+	virtual ~Ship();
+
+	void setShipCrew();
+	void setShipInventory();
+
+	string getShipName();
+	void setShipName(string);
+	
+	int getAttack();
+	void setAttack(int);
+
+	int getHealth();
+	void setHealth(int);
+
+	int getSpeed();
+	void setSpeed(int);
+
+	int cannonball();
+	int chainShot();
+	int scatterShot();
+
+	void addItem(Item);
+	void useItem(Item);
+
 };
-
 #endif
