@@ -6,7 +6,7 @@ using namespace std;
 
 Crew::Crew() {
 	srand(time(NULL));
-	int n = 10 + rand()%25;
+	int n = 10 + rand()%MAX_CREW;
 	crewNumber = n;
 	mutinyLevel = 0;
 }
