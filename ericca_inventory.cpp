@@ -1,74 +1,56 @@
-// Add more includes if needed
-#include <iostream>
 #include "inventory.h"
+#include <time.h>
+#include <stdlib.h>
 
 using namespace std;
 
-#define MAX_SPACE 100
-#define MIN_SPACE 0
+Inventory::Inventory() : filledSpace(0), emptySpace(MAX_SPACE),
+	foodSpace(0), weaponSpace(0), repairSpace(0) {}
 
-Inventory::Inventory() {
-	filledSpace = MIN_SPACE;
-	foodSpace = MIN_SPACE;
-	repairSpace = MIN_SPACE;
-	weaponSpace = MIN_SPACE;
-	emptySpace = MAX_SPACE;
-}
-
-Inventory::~Inventory() {
-	// delete Item[]
-	delete [] inventorySpace;
-}
+Inventory::~Inventory() { delete [] inventorySpace; }
 
 void Inventory::addItem(Item item) {
-	if (filledSpace != MAX_SPACE) {
-		if (item.getItemType() == "repair") {
+	if(filledSpace == 0) {
+		inventorySpace[filledSpace] = item;
+	}
+	else if(filledSpace != MAX_SPACE) {
+		if(item.getItemType() == "repair") {
 			repairSpace++;
 		}
-		else if(item.getItemType() == "food") {
+		else if (item.getItemType() == "food") {
 			foodSpace++;
 		}
 		else if (item.getItemType() == "weapon") {
 			weaponSpace++;
 		}
-		for(int i = 0; i < filledSpace; i++) {
-			inventorySpace[i] = item;
-		}
+		inventorySpace[filledSpace + 1] = item;
 		filledSpace++;
-	}
-	else {
-		// System error print out: "Error: Inventory is full!"
 	}
 }
 
 int Inventory::useItem(string itemType) {
-	// need to find a way to accept Item subclasses instead of just item.
-	if(filledSpace > MIN_SPACE) {
+	if (filledSpace > 0) {
 		for(int i = 0; i < filledSpace; i++) {
-			if (inventorySpace[i].itemType == itemType) {
-				if(itemType == "repair" && repairSpace > 0) { // 1 bonus
-					Repair item;
-					return item.healthBonus;
+			if(inventorySpace[i].getItemType() == itemType) {
+				if(itemType == "repair" && repairSpace > 0) {
+					return inventorySpace[i].getHealthBonus();
 				}
-				else if (itemType == "food" && foodSpace > 0) { // 2 bonuses
-					Food item;
+				else if (itemType == "food" && foodSpace > 0) {
 					srand(time(NULL));
 					int n = 1 + rand()%2;
 					switch(n) {
-						case 1: return item.healthBonus;
-						case 2: return item.attackBonus;
+					case 1: return inventorySpace[i].getHealthBonus();
+					case 2: return inventorySpace[i].getAttackBonus();
 					}
 				}
-				else if (itemType == "weapon" && weaponSpace > 0) { // 2 bonuses
-					Weapon item;
+				else if (itemType == "weapon" && weaponSpace > 0) {
 					srand(time(NULL));
 					int n = 1 + rand()%2;
 					switch(n) {
-						case 1: return item.attackBonus;
-						case 2: return item.speedBonus;
+					case 1: return inventorySpace[i].getAttackBonus();
+					case 2: return inventorySpace[i].getSpeedBonus();
 					}
 				}
-				// getting rid of item from inventorySpace array
 				for(int index = i; index < filledSpace; index++) {
 					inventorySpace[index] = inventorySpace[index++];
 					inventorySpace[filledSpace - 1] = NULL;
@@ -76,54 +58,30 @@ int Inventory::useItem(string itemType) {
 				filledSpace--;
 				emptySpace++;
 			}
-			// when iterator reaches the last Item
-			else if (inventorySpace[filledSpace - 1].itemType != itemType) {
-				// Print out on game: Item doesn't exist in inventory.
+			else if (inventorySpace[filledSpace - 1].getItemType() != itemType) {
 				return 0;
 			}
 		}
 	}
 }
 
-// Get and set methods for attributes
-int Inventory::getFilledSpace() {
-	return filledSpace;
-}
+// Getters and setters for private attributes
+int Inventory::getFilledSpace() { return filledSpace; }
 
-void Inventory::setFilledSpace(int space) {
-	filledSpace = space;
-}
+void Inventory::setFilledSpace(int space) { filledSpace = space; }
 
-int Inventory::getFoodSpace() {
-	return foodSpace;
-}
+int Inventory::getEmptySpace() { return emptySpace; }
 
-void Inventory::setFoodSpace(int space) {
-	foodSpace = space;
-}
+void Inventory::setEmptySpace(int space) { emptySpace = space; }
 
-int Inventory::getReapairSpace() {
-	return repairSpace;
-}
+int Inventory::getFoodSpace() { return foodSpace; }
 
-void Inventory::setRepairSpace(int space) {
-	repairSpace = space;
-}
+void Inventory:: setFoodSpace(int space) { foodSpace = space; }
 
-int Inventory::getWeaponsSpace() {
-	return weaponSpace;
-}
+int Inventory::getRepairSpace() { return repairSpace; }
 
-void Inventory::setWeaponSpace(int space) {
-	weaponSpace = space;
-}
+void Inventory::setRepairSpace(int space) { repairSpace = space; }
 
-int Inventory::getEmptySpace() {
-	return emptySpace;
-}
+int Inventory::getWeaponSpace() { return weaponSpace; }
 
-void Inventory::setEmptySpace(int space) {
-	emptySpace = space;
-}
-
-/* End of inventory.cpp */
+void Inventory::setWeaponSpace(int space) { weaponSpace = space; }
