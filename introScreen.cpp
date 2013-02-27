@@ -31,11 +31,11 @@ void IntroScreen::makeIntroScreen(float ScreenWidth, float ScreenHeight){
 	al_install_mouse();
 	al_install_keyboard();
 
-	ALLEGRO_BITMAP *skull = al_load_bitmap("skull.png");
+	ALLEGRO_BITMAP *skull = al_load_bitmap("skullTitle.png");
 	al_draw_bitmap(skull,0,0,NULL);
 
-	ALLEGRO_BITMAP *title = al_load_bitmap("Title.png");
-	al_draw_bitmap( title,0,0,NULL); 
+	//ALLEGRO_BITMAP *title = al_load_bitmap("Title.png");
+	//al_draw_bitmap( title,0,0,NULL); 
 
 	Button playButton;
 	playButton.printText(85, "Pirate.ttf",255,0,0,ScreenWidth/2,150, ALLEGRO_ALIGN_CENTRE,"Play Game");
@@ -97,11 +97,6 @@ void IntroScreen::makeIntroScreen(float ScreenWidth, float ScreenHeight){
 					//al_draw_filled_rectangle(pos_x, pos_y,pos_x+15,pos_y+15,al_map_rgb(0,255,255));
 
 				}
-			}
-			else if (ev.mouse.button & 2)
-			{
-			setDone(true);
-			al_draw_filled_rectangle(pos_x, pos_y,pos_x+15,pos_y+15,al_map_rgb(255,0,0));
 			}
 			al_flip_display();
 		}
