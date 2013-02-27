@@ -83,15 +83,6 @@ int Inventory::useItem(string itemType) {
 			}
 		}
 	}
-	if(itemType == "repair") {
-		item[0]--;
-	}
-	else if (itemType == "food") {
-		item[1]--;
-	}
-	else if (itemType == "weapon") {
-		item[2]--;
-	}
 }
 
 // Get and set methods for attributes
