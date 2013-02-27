@@ -1,13 +1,34 @@
-#include <iostream>
-#include "item.h"
+#ifndef ITEM_H
+#define ITEM_H
 
+#include <string>
 using namespace std;
 
-string Item::getItemType() {
-	return itemType;
-}
+class Item {
+private:
+	// need to change this to const char * instead for allegro al_draw_text()
+	string itemName;
+	string itemType;
+	int attackBonus, healthBonus, speedBonus;
 
-void Item::setItemType(string type) {
-	itemType = type;
-}
-/* End of item.cpp */
+public:
+	Item();
+	Item(string name, string type);
+
+	// need to change this to const char * instead for allegro al_draw_text()
+	string getItemName();
+	void setItemName(string);
+
+	string getItemType();
+	void setItemType(string);
+
+	int getAttackBonus();
+	void setAttackBonus(int);
+	
+	int getHealthBonus();
+	void setHealthBonus(int);
+
+	int getSpeedBonus();
+	void setSpeedBonus(int);
+};
+#endif
