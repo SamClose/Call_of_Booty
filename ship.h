@@ -14,8 +14,11 @@ private:
 
 	Inventory shipInventory;
 	Crew shipCrew;
-
+	
+	// needs to be a const char *
 	string shipName;
+
+	// speed can be used for a wait time or increases attack
 	int attack, health, speed;
 
 public:
