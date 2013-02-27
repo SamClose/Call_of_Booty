@@ -1,22 +1,18 @@
 #ifndef CREW_H
 #define CREW_H
 
+using namespace std;
 class Crew {
+private:
+	int crewNumber, mutinyLevel;
 	
-	private:
-		int crewNumber, mutinyLevel, happinessLevel;
+public:
+	Crew(); // initializing attributes
 
-	public:
-		Crew(); // initializing attributes randomize crew number
+	int getCrewNumber();
+	void setCrewNumber(int);
 
-		int getCrewNumber();
-		void setCrewNumber(int number);
-
-		int getMutinyLevel();
-		void setMutinyLevel(int number);
-		
-		int getHappinessLevel();
-		void setHappinessLevel(int number);
+	int getMutinyLevel();
+	void setMutinyLevel(int);
 };
-
 #endif
