@@ -4,6 +4,8 @@
 using namespace std;
 class Crew {
 private:
+	// subject to change
+	const int MAX_CREW = 25;
 	int crewNumber, mutinyLevel;
 	
 public:
