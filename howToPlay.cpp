@@ -31,11 +31,14 @@ void HowToPlay::makeHowToPlayScreen(){
 	event_queueH = al_create_event_queue();
 	al_register_event_source(event_queueH,al_get_mouse_event_source());
 
-	al_draw_filled_rectangle(0,0,800,600,al_map_rgb(0,0,0));
+	
+	ALLEGRO_BITMAP *skull = al_load_bitmap("skull.png");
+	al_draw_bitmap(skull,0,0,NULL);
 
 	ALLEGRO_FONT *font = al_load_font("Pirate.ttf", 45, NULL);
-	al_draw_text(font, al_map_rgb(255,0,0),0,0,NULL,"Click to go back, here's some more filler text");
-
+	al_draw_text(font, al_map_rgb(255,0,0),400,75,ALLEGRO_ALIGN_CENTER,"Use the arrow keys to move around the map");
+	al_draw_text(font, al_map_rgb(255,0,0),400,175,ALLEGRO_ALIGN_CENTER,"Filler text, hopefully something else can be added");
+	al_draw_text(font, al_map_rgb(255,0,0),400,500,ALLEGRO_ALIGN_CENTER,"Click anywhere to go back");
 	al_flip_display();
 
 	setHowDone(false);
