@@ -1,108 +1,38 @@
-// add other includes to this if needed
 #include <iostream>
 #include "ship.h"
 using namespace std;
 
-#define MAX_HEALTH 100
-#define MAX_SPEED 10
-#define MAX_ATTACK 20
+Ship::Ship() : health(MAX_HEALTH), attack(MAX_ATTACK), speed(MAX_SPEED) {}
 
-Ship::Ship() {
-	health = MAX_HEALTH;
-	attack = MAX_ATTACK;
-	speed = MAX_SPEED;
+Ship::~Ship() { shipInventory.~Inventory(); }
+
+void Ship::addItem(Item item) { shipInventory.addItem(item); }
+
+void Ship::useItem(Item item) { shipInventory.useItem(item.getItemType()); }
+
+void Ship::setShipCrew() {
+	Crew newCrew = Crew();
+	shipCrew = newCrew;
 }
 
-virtual ~Ship::Ship() {
-	health = 0;
-	shipInventory.~Inventory();
-	shipCrew.~Crew();
+void Ship::setShipInventory() {
+	Inventory newInventory = Inventory();
+	shipInventory = newInventory;
 }
 
-string Ship::getShipName() {
-	return shipName;
-}
+string Ship::getShipName() { return shipName; }
 
-void Ship::setShipName(string name) {
-	shipName = name;
-}
+int Ship::getHealth() { return health; }
 
-int Ship::getHealth() {
-	return health;
-}
+int Ship::getAttack() { return attack; }
 
-void Ship::setHealth(int hitPoints) {
-	if (hitPoints > MAX_HEALTH) {
-		cout << "Error: Health cannot be greater than " << MAX_HEALTH << endl;
-	}
-	else if (hitPoints < 0) {
-		cout << "Error: Health needs to be a positive integer." << endl;
-	}
-	else {
-		health = hitPoints;
-	}
-}
+int Ship::getSpeed() { return speed; }
 
-int Ship::getAttack() {
-	return attack;
-}
+void Ship::setShipName(string name) { shipName = name; }
 
-void Ship::setAttack(int shipAttack) {
-	// I don't even know if we should have these
-	if (shipAttack > MAX_ATTACK) {
-		cout << "Error: Attack needs to be less than or equal to " << MAX_ATTACK << endl;
-	}
-	else if (shipAttack < 0) {
-		cout << "Error: Attack cannot be less than 0." << endl;
-	}
-	else {
-		attack = shipAttack;
-	}
-}
+void Ship::setHealth(int num) { health = num; }
 
-int Ship::getSpeed() {
-	return speed;
-}
+void Ship::setAttack(int num) { attack = num; }
 
-void Ship::setSpeed(int agility) {
-	if (agility > MAX_SPEED) {
-		cout << "Error: Speed needs to be less than or equal to " << MAX_SPEED << endl;
-	}
-	else if (agility < 0) {
-		cout << "Error: Speed cannot be less than 0." << endl;
-	}
-	else {
-		speed = agility;
-	}
-}
-
-int Ship::shipCannonball() {
-	// return a randomized num or set a value?
-	return attack;
-}
-
-int Ship::shipChainShot() {
-	return attack/speed;
-}
-
-int Ship::shipScatterShot() {
-	return attack/4;
-}
-
-int Ship::shipExplosiveCannonball() {
-	return health/2;
-}
-
-void Ship::shipAddItem(Item item) {
-	shipInventory.addItem(item);
-}
-
-void Ship::shipUseItem(Item item) {
-	shipInventory.useItem(item);
-}
-
-void Ship::crewUseItem(Item item) {
-	shipCrew.crewUseItem(item);
-}
-
+void Ship::setSpeed(int num) { speed = num; }
 /* End of ship.cpp */
