@@ -1,43 +1,22 @@
-// Add other invludes if need be
-#include <iostream>
 #include "crew.h"
+#include <time.h>
+#include <stdlib.h>
 
 using namespace std;
 
-#define MAX_MUTINY_LEVEL 100
-#define MIN_MUTINY_LEVEL 0
-#define MAX_HAPPY_LEVEL 100
-#define MAX_CREW_NUMBER 20 // not sure what number to put here
-#define MIN_CREW_NUMBER 5
-
 Crew::Crew() {
-	mutinyLevel = MIN_MUTINY_LEVEL;
-	happinessLevel = MAX_HAPPY_LEVEL;
-	crewNumber = MAX_CREW_NUMBER;
+	srand(time(NULL));
+	// range: 10 to 25 crew members
+	int n = 10 + rand()%25;
+	crewNumber = n;
+	mutinyLevel = 0;
 }
 
-int Crew::getCrewNumber() {
-	return crewNumber;
-}
+int Crew::getCrewNumber() { return crewNumber; }
 
-void Crew::setCrewNumber(int number) {
-	crewNumber = number;
-}
+void Crew::setCrewNumber(int num) { crewNumber = num; }
 
-int Crew::getMutinyLevel() {
-	return mutinyLevel;
-}
+int Crew::getMutinyLevel() { return mutinyLevel; }
 
-void Crew::setMutinylevel(int level) {
-	mutinyLevel = level;
-}
-
-int Crew::getHappinessLevel() {
-	return happinessLevel;
-}
-
-void Crew::setHappinessLevel(int level) {
-	happinessLevel = level;
-}
-
-/* End of Crew.cpp */
+void Crew::setMutinyLevel(int num) { mutinyLevel = num; }
+/* End of crew.cpp */
