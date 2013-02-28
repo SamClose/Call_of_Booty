@@ -36,24 +36,14 @@ int Inventory::useItem(string itemType) {
 					return inventorySpace[i].getHealthBonus();
 				}
 				else if (itemType == "food" && foodSpace > 0) {
-					srand(time(NULL));
-					int n = 1 + rand()%2;
-					switch(n) {
-					case 1: return inventorySpace[i].getHealthBonus();
-					case 2: return inventorySpace[i].getAttackBonus();
-					}
+					return inventorySpace[i].getHealthBonus();
 				}
 				else if (itemType == "weapon" && weaponSpace > 0) {
-					srand(time(NULL));
-					int n = 1 + rand()%2;
-					switch(n) {
-					case 1: return inventorySpace[i].getAttackBonus();
-					case 2: return inventorySpace[i].getSpeedBonus();
-					}
+					return inventorySpace[i].getAttackBonus();
 				}
 				for(int index = i; index < filledSpace; index++) {
 					inventorySpace[index] = inventorySpace[index++];
-					inventorySpace[filledSpace - 1] = NULL;
+					inventorySpace[filledSpace - 1].~Item();
 				}
 				filledSpace--;
 				emptySpace++;
