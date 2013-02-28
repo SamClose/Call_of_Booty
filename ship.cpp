@@ -9,20 +9,35 @@ using namespace std;
 Ship::Ship() : health(MAX_HEALTH), attack(MAX_ATTACK), speed(MAX_SPEED) {}
 
 // deallocates array memory
-Ship::~Ship() { shipInventory.~Inventory(); }
+Ship::~Ship() { inventory.~Inventory(); }
 
-void Ship::addItem(Item item) { shipInventory.addItem(item); }
+void Ship::addItem(Item item) { inventory.addItem(item); }
 
-void Ship::useItem(Item item) { shipInventory.useItem(item.getItemType()); }
-
-void Ship::setShipCrew() {
-	Crew newCrew = Crew();
-	shipCrew = newCrew;
+void Ship::useItem(Item item) {
+	int newCrewHealth, newShipHealth, newAttack;
+	if(item.getItemType() == "food") {
+		if (newCrewHealth < MAX_HEALTH/2) {
+			newCrewHealth = crew.getHealth() + inventory.useItem(item.getItemType());
+			crew.setHealth(newCrewHealth);
+		}
+	}
+	if(item.getItemType() == "repair") {
+		if (newShipHealth < MAX_HEALTH) {
+			newShipHealth = getHealth() + inventory.useItem(item.getItemType());
+			setHealth(newShipHealth);
+		}
+	}
+	if(item.getItemType() == "weapon") {
+		setAttack(MAX_ATTACK + inventory.useItem(item.getItemType)/MAX_ATTACK);
+	}
 }
 
-void Ship::setShipInventory() {
-	Inventory newInventory = Inventory();
-	shipInventory = newInventory;
+void Ship::setCrew() {
+	crew = Crew();
+}
+
+void Ship::setInventory() {
+	inventory = Inventory();	
 }
 // gives the most damage to enemy
 int Ship::explosiveCannonball() { 
@@ -60,7 +75,7 @@ int Ship::scatterShot() {
 
 // Getters and Setters
 // need to change this to const char * instead for allegro al_draw_text()
-string Ship::getShipName() { return shipName; }
+const char *Ship::getShipName() { return shipName; }
 
 int Ship::getHealth() { return health; }
 
@@ -68,7 +83,7 @@ int Ship::getAttack() { return attack; }
 
 int Ship::getSpeed() { return speed; }
 
-void Ship::setShipName(string name) { shipName = name; }
+void Ship::setShipName(const char *name) { shipName = name; }
 
 void Ship::setHealth(int num) { health = num; }
 
