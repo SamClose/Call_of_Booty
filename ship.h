@@ -6,17 +6,14 @@
 using namespace std;
 class Ship {
 private:
-	const int MAX_HEALTH = 100;
-	const int MAX_ATTACK = 20;
-	const int MAX_SPEED = 10;
+	static const int MAX_HEALTH = 100;
+	static const int MAX_ATTACK = 20;
+	static const int MAX_SPEED = 10;
 
-	int explosiveCannonball();
-
-	Inventory shipInventory;
-	Crew shipCrew;
+	Inventory inventory;
+	Crew crew;
 	
-	// needs to be a const char *
-	string shipName;
+	const char *shipName;
 
 	// speed can be used for a wait time or increases attack
 	int attack, health, speed;
@@ -25,11 +22,11 @@ public:
 	Ship();
 	virtual ~Ship();
 
-	void setShipCrew();
-	void setShipInventory();
+	void setCrew();
+	void setInventory();
 
-	string getShipName();
-	void setShipName(string);
+	const char *getShipName();
+	void setShipName(const char *name);
 	
 	int getAttack();
 	void setAttack(int);
@@ -42,6 +39,7 @@ public:
 
 	int cannonball();
 	int chainShot();
+	int explosiveCannonball();
 	int scatterShot();
 
 	void addItem(Item);
