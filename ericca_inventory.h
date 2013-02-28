@@ -6,7 +6,7 @@ using namespace std;
 
 class Inventory {
 private:
-	const int MAX_SPACE = 100;
+	static const int MAX_SPACE = 100;
 	int filledSpace, emptySpace, foodSpace, weaponSpace, repairSpace;
 	Item inventorySpace[MAX_SPACE];
 
@@ -17,6 +17,7 @@ public:
 
 	// adds or removes items from Item[]
 	void addItem(Item);
+	// depends on itemType
 	int useItem(string);
 	
 	int getFilledSpace();
