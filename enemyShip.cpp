@@ -1,29 +1,18 @@
-#include <iostream>
-#include "enemyShip.h"
 
+#include "enemyShip.h"
 using namespace std;
 
-// Values subject to change
-#define MAX_ENEMY_HEALTH 100
-#define MAX_ENEMY_ATTACK 20
-#define MAX_ENEMY_SPEED 10
+EnemyShip::~EnemyShip() { inventory.~Inventory(); }
 
-EnemyShip::EnemyShip() {
-	health = MAX_ENEMY_HEALTH;
-	attack = MAX_ENEMY_ATTACK;
-	speed = MAX_ENEMY_SPEED;
+void EnemyShip::setShipInventory() {
+	inventory.setEmptySpace(MAX_SPACE);
 }
 
-int EnemyShip::shipCannonBall() {
-	return attack;
+void EnemyShip::addItem(Item item) {
+	if(inventory.getFilledSpace() < inventory.getEmptySpace() && inventory.getFilledSpace() >= 0)
+		Ship::addItem(item);
 }
 
-int EnemyShip::shipScatterShot() {
-	return attack/4;
+void EnemyShip::useItem(Item item) {
+	Ship::useItem(item);
 }
-
-int EnemyShip::shipChainShot() {
-	return attack/speed;
-}
-
-/* End of enemyShip.cpp */
