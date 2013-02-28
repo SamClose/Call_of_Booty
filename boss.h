@@ -1,31 +1,36 @@
 #ifndef BOSS_H
 #define BOSS_H
 
+using namespace std;
 class Boss {
-	private:
-		string bossName;
-		int health, attack;
+private:
+	static const int MAX_HEALTH = 1000;
+	static const int MAX_ATTACK = 100;
+	static const int MIN_ATTACK = 30;
+	static const int MAX_DEFENSE = 20;
+	static const int MIN_DEFENSE = 0;
+	static const int MAX_SPEED = 20;
+	static const int MIN_SPEED = 3;
 
-	public:
-		Boss();
+	const char *bossName;
+	int health, attack;
 
-		// randomizer to return values
-		int bossAttack(); // bite animation
-		int bossSlime(); // slows down enemy can just turn dragon greener and do bite attack
-		int fireBlast(); // Fire attack animation
-		int waterBlast(); // change color of fire attack animation
-		// Comes up with a value to decrease an incoming attack.
-		int defend(int shipAttack); // boss just curls back its head or something
-		void tidalWave(); // regenerates health do a water animation
-		
-		// Getters
-		string getBossName();
-		int getHealth();
-		int getAttack();
-		
-		// Setters
-		void setBossName(string name);
-		void setHealth(int value);
-		void setAttack(int value);
-}
+public:
+	Boss();
+
+	int bite();
+	int slime();
+	int fireBlast();
+	int waterBlast();
+	void defend(int);
+	void tidalWave();
+
+	const char *getBossName();
+	int getHealth();
+	int getAttack();
+
+	void setBossName(const char *name);
+	void setHealth(int);
+	void setAttack(int);
+};
 #endif
