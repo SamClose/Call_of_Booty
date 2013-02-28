@@ -14,18 +14,17 @@ using namespace std;
 
 class Item {
 private:
-	// need to change this to const char * instead for allegro al_draw_text()
-	string itemName;
+	const char *itemName;
 	string itemType;
 	int attackBonus, healthBonus, speedBonus;
 
 public:
 	Item();
-	Item(string name, string type);
+	Item(const char *name, string type);
+	virtual ~Item();
 
-	// need to change this to const char * instead for allegro al_draw_text()
-	string getItemName();
-	void setItemName(string);
+	const char *getItemName();
+	void setItemName(const char *name);
 
 	string getItemType();
 	void setItemType(string);
