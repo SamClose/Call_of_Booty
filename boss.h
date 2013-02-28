@@ -1,36 +1,56 @@
-#ifndef BOSS_H
-#define BOSS_H
+#include <stdlib.h>
+#include <time.h>
 
+#include "boss.h"
 using namespace std;
-class Boss {
-private:
-	static const int MAX_HEALTH = 1000;
-	static const int MAX_ATTACK = 100;
-	static const int MIN_ATTACK = 30;
-	static const int MAX_DEFENSE = 20;
-	static const int MIN_DEFENSE = 0;
-	static const int MAX_SPEED = 20;
-	static const int MIN_SPEED = 3;
 
-	const char *bossName;
-	int health, attack;
+// Constructor
+Boss::Boss() {
+	health = MAX_HEALTH;
+	attack = MAX_ATTACK;
+}
 
-public:
-	Boss();
+// Basic attack
+int Boss::bite() {
+	srand(time(NULL));
+	return MIN_ATTACK + rand()%(attack);
+}
 
-	int bite();
-	int slime();
-	int fireBlast();
-	int waterBlast();
-	void defend(int);
-	void tidalWave();
+// Slows down enemy
+int Boss::slime() {
+	srand(time(NULL));
+	return MIN_SPEED + rand()%(MAX_SPEED);
+}
 
-	const char *getBossName();
-	int getHealth();
-	int getAttack();
+int Boss::fireBlast() {
+	srand(time(NULL));
+	return MIN_ATTACK + rand()%(attack*(2/3));
+}
 
-	void setBossName(const char *name);
-	void setHealth(int);
-	void setAttack(int);
-};
-#endif
+int Boss::waterBlast() {
+	srand(time(NULL));
+	return MIN_ATTACK + rand()%(attack/3);
+}
+
+void Boss::defend(int attack) {
+	srand(time(NULL));
+	int def = MIN_DEFENSE + rand()%(MAX_DEFENSE);
+	setHealth(def - attack);
+}
+
+void Boss::tidalWave() {
+	if(health != MAX_HEALTH) 
+		setHealth(health + 10);
+}
+
+const char *Boss::getBossName() { return bossName; }
+
+int Boss::getHealth() { return health; }
+
+int Boss::getAttack() { return attack; }
+
+void Boss::setBossName(const char *name) { bossName = name; }
+
+void Boss::setHealth(int num) { health = num; }
+
+void Boss::setAttack(int num) { attack = num; }
