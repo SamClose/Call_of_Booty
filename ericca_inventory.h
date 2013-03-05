@@ -7,10 +7,21 @@ using namespace std;
 class Inventory {
 private:
 	static const int MAX_SPACE = 100;
-	int filledSpace, emptySpace, foodSpace, weaponSpace, repairSpace;
-	Item inventorySpace[MAX_SPACE];
+	int filledSpace, emptySpace;
+	// 0: repair
+	// 1: food
+	// 2: cannonballs
+	// 3: small balls
+	// 4: chain balls
+	// 5: explosive cannonballs limit 3
+	int inventorySpace[6];
 
 public:
+	Item *food, *water, *booze,
+		*wood, *tools, *rope, 
+		*cannonBallItem, *scatterShotItem, 
+		*chainShotItem, *explosiveCannonballItem;
+
 	// initializes values
 	Inventory();
 	~Inventory();
@@ -18,21 +29,12 @@ public:
 	// adds or removes items from Item[]
 	void addItem(Item);
 	// depends on itemType
-	int useItem(string);
+	int useItem(Item);
 	
 	int getFilledSpace();
 	void setFilledSpace(int);
 
 	int getEmptySpace();
 	void setEmptySpace(int);
-
-	int getFoodSpace();
-	void setFoodSpace(int);
-
-	int getWeaponSpace();
-	void setWeaponSpace(int);
-
-	int getRepairSpace();
-	void setRepairSpace(int);
 };
 #endif
