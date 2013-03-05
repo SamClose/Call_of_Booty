@@ -28,7 +28,7 @@ private:
 	// else deactivate iterators and let enemy attack
 	bool userTurn;
 
-	// draws battle screen
+	// draws battle screen for Ship and an Enemy
 	void draw(Ship, const char *name);
 
 public:
@@ -42,11 +42,5 @@ public:
 	// use randomizer to select attacks
 	void shipBattle(Ship); 
 	void bossBattle(Ship);
-
-	// gets an attack and bool to update healthBar
-	// if it is user's turn change enemy's HP bar
-	// else change user's HP bar
-	void update(bool, int);
-
 };
 #endif
