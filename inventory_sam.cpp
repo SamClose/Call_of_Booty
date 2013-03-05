@@ -13,7 +13,7 @@ Inventory::Inventory(){
 	chainShot = 0;
 	cannonBalls = 0;
 	scatterShot = 0;
-	booze;
+	booze = 0;
 	
 }
 
