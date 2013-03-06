@@ -6,15 +6,15 @@
 using namespace std;
 class EnemyShip : public Ship {
 private:
-	static const int MAX_SPACE = 60;
 	static const int MAX_ATTACK = 25;
-	static const int MAX_SPEED = 7;
 	static const int MAX_HEALTH = 130;
+	static const int MAX_SPACE = 60;
+	static const int MAX_SPEED = 7;
 
 	const char *shipName;
 	int attack, health, speed;
 
-	Inventory inventory;
+	Inventory *inventory;
 
 public:
 	// sets attributes using parent
@@ -30,11 +30,9 @@ public:
 	// allocate inventory for weapons (cannonballs, small balls, chain balls) and health (wood, tools, rope)
 	// 51 (17 each) for weapons 9 (3 each) for health
 	void setShipInventory();
-	
+
 	// condition: don't add/use if filledSpace is >= emptySpace
 	// then use parent function to add
 	void addItem(Item);
-	void useItem(Item);
-
 };
 #endif
