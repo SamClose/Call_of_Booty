@@ -72,8 +72,6 @@ bool Battle::shipBattle(Ship *ship) {
 
 	// assign appropriate sprite
 
-	// assign keys for commands can change to mouse later
-
 	timer = al_create_timer(1.0/FPS);
 	eventQueue = al_create_event_queue();
 	al_install_keyboard();
@@ -168,7 +166,7 @@ bool Battle::shipBattle(Ship *ship) {
 					if (repaIter > 6)
 						repaIter = 6;
 					if (repaIter == 6)
-						repaIter = 6;
+						repaIter = 0;
 				}
 				drawn = true;
 				break;
@@ -254,9 +252,9 @@ bool Battle::shipBattle(Ship *ship) {
 		}
 		if (redraw && al_is_event_queue_empty(eventQueue)) {
 			redraw = false;
-			// draws screen
+
 			draw();
-			// notifies if it has been selected
+
 			if(entered) {
 				al_draw_filled_rectangle(0, SCREEN_HEIGHT - 180, SCREEN_WIDTH, SCREEN_HEIGHT - 165, white);
 				al_draw_text(font, red, 260, SCREEN_HEIGHT - 176, ALLEGRO_ALIGN_CENTER, "Tip: If ENTERED! Press ENTER again."); 
@@ -266,17 +264,22 @@ bool Battle::shipBattle(Ship *ship) {
 				al_draw_filled_rectangle(0, SCREEN_HEIGHT - 180, SCREEN_WIDTH, SCREEN_HEIGHT - 165, white);
 				al_draw_text(font, black, 5, SCREEN_HEIGHT - 176, ALLEGRO_ALIGN_LEFT, "NOT ENTERED!");
 			}
+
 			update();
 
 			// Battle Screen Controls
 			if(iter == -1) {
-				al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, "HOW TO BATTLE:");
-				al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, "ARROW PAD to move cursor.");
-				al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "ENTER to select, END to deselect/reset.");
+				al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, "HOW TO BATTLE: ARROW PAD to move cursor.");
+				al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, "ENTER to select, END to deselect/reset.");
+				al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "Press DOWN key to start.");
 			}
 
 			if(drawn) {
 				int trix1, trix2, trix3, triy1, triy2, triy3;
+				Item item1 = ship->getInventory()->getCannonballItem();
+				Item item2 = ship->getInventory()->getScatterShotItem();
+				Item item3 = ship->getInventory()->getChainShotItem();
+				Item item4 = ship->getInventory()->getExplosiveCannonballItem();
 				switch(iter) {
 				case 0: // Attack Menu
 					trix1 = SCREEN_WIDTH - 280;
@@ -286,11 +289,10 @@ bool Battle::shipBattle(Ship *ship) {
 					triy2 = triy1 + 20;
 					triy3 = SCREEN_HEIGHT - 120;
 					al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
-					// options: conditional statements to change text display but it would be easier if it was a const char *
-					al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->cannonBallItem->getItemName());
-					al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->scatterShotItem->getItemName());
-					al_draw_text(font, black, 240, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->chainShotItem->getItemName());
-					al_draw_text(font, black, 240, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->explosiveCannonballItem->getItemName());
+					al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, item1.getItemName());
+					al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, item2.getItemName());
+					al_draw_text(font, black, 240, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, item3.getItemName());
+					al_draw_text(font, black, 240, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, item4.getItemName());
 					if(attackMenu) {
 						switch(attkIter) {
 						case 0:
@@ -330,84 +332,95 @@ bool Battle::shipBattle(Ship *ship) {
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
 							break;
 						}
+					}
 
-						if(userTurn && userHP != 528) {
-							switch(attkIter) {
-							case 0: // CannonBalls
-								if (entered) {
-									enemyHP -= enemyHP*(ship->cannonball()/100);
-									if(enemyHP < 35)
-										enemyHP = 35;
-									entered = false; // stops constant attack
-								}
-								al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "Firing Cannonballs!");
-								enemyTurn = true;
-								break;
-							case 1: // Scatter Shot
-								if (entered) {
-									enemyHP -= enemyHP*(ship->scatterShot()/100);
-									if(enemyHP < 35)
-										enemyHP = 35;
-									entered = false; // stops constant attack
-								}
-								al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "SCATTERSHOT, FIRE!!!");
-								al_draw_text(font, black, 40, SCREEN_HEIGHT - 45, ALLEGRO_ALIGN_LEFT, "Bojangles: HOMG STAAAHHHHP EEEET!!");
-								al_draw_text(font, black, 40, SCREEN_HEIGHT - 30, ALLEGRO_ALIGN_LEFT, "  YOU'RE BLOWING HOLES IN MY SHIP!");
-								enemyTurn = true;
-								break;
-							case 2: // Chain Shot
-								if (entered) {
-									enemyHP -= enemyHP*(ship->chainShot()/100);
-									if(enemyHP < 35)
-										enemyHP = 35;
-									entered = false; // stops constant attack
-								}
-								al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "Firing chain balls!");
-								al_draw_text(font, black, 40, SCREEN_HEIGHT - 45, ALLEGRO_ALIGN_LEFT, "They slowed down the enemy!");
-								al_draw_text(font, black, 40, SCREEN_HEIGHT - 30, ALLEGRO_ALIGN_LEFT, "Bojangles: YOU SON OF A BUTT!");
-								enemyTurn = true;
-								break;
-							case 3: // Explosive Cannonball
-								if (entered) {
-									enemyHP -= ship->explosiveCannonball();
-									if(enemyHP < 35)
-										enemyHP = 35;
-									entered = false; // stops constant attack
-								}
-								al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "BOOM goes the dynamite!");
-								enemyTurn = true;
-								break;
+					if(userTurn && userHP != 528) {
+						switch(attkIter) {
+						case 0: // CannonBalls
+							if (entered) {
+								enemyHP -= enemyHP*(ship->cannonball()/100);
+								if(enemyHP < 62)
+									enemyHP = 62;
+								entered = false; // stops constant attack
 							}
-							update();
-						}
-						if(enemyTurn && enemyHP != 62) {
-							srand(time(NULL));
-							int n = rand()%4;
-							switch(n) {
-							case 0: // Cannonball
-								userHP -= userHP*(enemy->cannonball()/100);
-								break;
-							case 1: // Chain Shot
-								userHP -= userHP*(enemy->chainShot()/100);
-								break;
-							case 2: // Scatter Shot
-								userHP -= userHP*(enemy->scatterShot()/100);
-								break;
-							case 3:
-								// look through inventory for healing item
-								Item *item = enemy->getInventory()->wood;
-								enemy->useItem(*item);
-								break;
+							al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "Firing Cannonballs!");
+							enemyTurn = true;
+							break;
+						case 1: // Scatter Shot
+							if (entered) {
+								enemyHP -= enemyHP*(ship->scatterShot()/100);
+								if(enemyHP < 62)
+									enemyHP = 62;
+								entered = false; // stops constant attack
 							}
-							if(userHP < 500)
-								userHP = 500;
-							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
-							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "ENEMY ATTACKED!");
-							update();
-							al_flip_display();
-							al_rest(1);
-							enemyTurn = false;
+							al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "SCATTERSHOT, FIRE!!!");
+							al_draw_text(font, black, 40, SCREEN_HEIGHT - 45, ALLEGRO_ALIGN_LEFT, "Bojangles: HOMG STAAAHHHHP EEEET!!");
+							al_draw_text(font, black, 40, SCREEN_HEIGHT - 30, ALLEGRO_ALIGN_LEFT, "  YOU'RE BLOWING HOLES IN MY SHIP!");
+							enemyTurn = true;
+							break;
+						case 2: // Chain Shot
+							if (entered) {
+								enemyHP -= enemyHP*(ship->chainShot()/100);
+								if(enemyHP < 62)
+									enemyHP = 62;
+								entered = false; // stops constant attack
+							}
+							al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "Firing chain balls!");
+							al_draw_text(font, black, 40, SCREEN_HEIGHT - 45, ALLEGRO_ALIGN_LEFT, "They slowed down the enemy!");
+							al_draw_text(font, black, 40, SCREEN_HEIGHT - 30, ALLEGRO_ALIGN_LEFT, "Bojangles: YOU SON OF A BUTT!");
+							enemyTurn = true;
+							break;
+						case 3: // Explosive Cannonball
+							if (entered) {
+								enemyHP -= ship->explosiveCannonball();
+								if(enemyHP < 62)
+									enemyHP = 62;
+								entered = false; // stops constant attack
+							}
+							al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "BOOM goes the dynamite!");
+							enemyTurn = true;
+							break;
 						}
+						update();
+						al_rest(1);
+						userTurn = false;
+						enemyTurn = true;
+					}
+					if(enemyTurn && enemyHP != 62) {
+						Item item1 = enemy->getInventory()->getWood();
+						Item item2 = enemy->getInventory()->getTools();
+						Item item3 = enemy->getInventory()->getRope();
+						srand(time(NULL));
+						int n = rand()%6;
+						switch(n) {
+						case 0: // Cannonball
+							userHP -= userHP*(enemy->cannonball()/100);
+							break;
+						case 1: // Chain Shot
+							userHP -= userHP*(enemy->chainShot()/100);
+							break;
+						case 2: // Scatter Shot
+							userHP -= userHP*(enemy->scatterShot()/100);
+							break;
+							// Healing
+						case 3:
+							enemy->useItem(item1);
+							break;
+						case 4:
+							enemy->useItem(item2);
+							break;
+						case 5:
+							enemy->useItem(item3);
+							break;
+						}
+						update();
+						al_rest(2);
+						enemyTurn = false;
+					}
+					else {
+						al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
+						al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "ENEMY ATTACKED!");
+						update();
 					}
 					break;
 				case 1: // Repair Menu
@@ -419,16 +432,22 @@ bool Battle::shipBattle(Ship *ship) {
 					triy3 = SCREEN_HEIGHT - 80;
 					al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
 					// Ship Repairs
-					al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->wood->getItemName());
-					al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, ship->getInventory()->rope->getItemName());
-					al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->tools->getItemName());
+					al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getWood().getItemName());
+					al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getRope().getItemName());
+					al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getTools().getItemName());
 					// Crew repairs
-					al_draw_text(font, black, 240, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->food->getItemName());
-					al_draw_text(font, black, 240, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->water->getItemName());
-					al_draw_text(font, black, 240, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, ship->getInventory()->booze->getItemName());
+					al_draw_text(font, black, 240, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getFood().getItemName());
+					al_draw_text(font, black, 240, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getWater().getItemName());
+					al_draw_text(font, black, 240, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getBooze().getItemName());
 					if(repairMenu) {
+						Item item1 = ship->getInventory()->getWood();
+						Item item2 = ship->getInventory()->getRope();
+						Item item3 = ship->getInventory()->getTools();
+						Item item4 = ship->getInventory()->getFood();
+						Item item5 = ship->getInventory()->getWater();
+						Item item6 = ship->getInventory()->getBooze();
 						switch(repaIter) {
-						case 0:
+						case 0: // wood
 							trix1 = 20;
 							trix2 = trix1;
 							trix3 = 40;
@@ -436,8 +455,14 @@ bool Battle::shipBattle(Ship *ship) {
 							triy2 = triy1 + 20;
 							triy3 = SCREEN_HEIGHT - 120;
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
+							if(entered) {
+								userHP += ship->getInventory()->useItem(item1);
+								if(userHP > 754)
+									userHP = 754;
+								entered = false;
+							}
 							break;
-						case 1:
+						case 1: // rope
 							trix1 = 20;
 							trix2 = trix1;
 							trix3 = 20;
@@ -445,8 +470,14 @@ bool Battle::shipBattle(Ship *ship) {
 							triy2 = triy1 + 20;
 							triy3 = SCREEN_HEIGHT - 90;
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
+							if(entered) {
+								userHP += ship->getInventory()->useItem(item2);
+								if(userHP > 754)
+									userHP = 754;
+								entered = false;
+							}
 							break;
-						case 2:
+						case 2: // tools
 							trix1 = 20;
 							trix2 = trix1;
 							trix3 = 40;
@@ -454,8 +485,14 @@ bool Battle::shipBattle(Ship *ship) {
 							triy2 = triy1 + 20;
 							triy3 = SCREEN_HEIGHT - 60;
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
+							if(entered) {
+								userHP += ship->getInventory()->useItem(item3);
+								if(userHP > 754)
+									userHP = 754;
+								entered = false;
+							}
 							break;
-						case 3:
+						case 3: // food
 							trix1 = 215;
 							trix2 = trix1;
 							trix3 = 235;
@@ -463,8 +500,14 @@ bool Battle::shipBattle(Ship *ship) {
 							triy2 = triy1 + 20;
 							triy3 = SCREEN_HEIGHT - 120;
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
+							if(entered) {
+								userHP += ship->getInventory()->useItem(item4);
+								if(userHP > 754)
+									userHP = 754;
+								entered = false;
+							}
 							break;
-						case 4:
+						case 4: // water
 							trix1 = 215;
 							trix2 = trix1;
 							trix3 = 235;
@@ -472,8 +515,14 @@ bool Battle::shipBattle(Ship *ship) {
 							triy2 = triy1 + 20;
 							triy3 = SCREEN_HEIGHT - 90;
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
+							if(entered) {
+								userHP += ship->getInventory()->useItem(item5);
+								if(userHP > 754)
+									userHP = 754;
+								entered = false;
+							}
 							break;
-						case 5:
+						case 5: // booze
 							trix1 = 215;
 							trix2 = trix1;
 							trix3 = 235;
@@ -481,18 +530,15 @@ bool Battle::shipBattle(Ship *ship) {
 							triy2 = triy1 + 20;
 							triy3 = SCREEN_HEIGHT - 60;
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
+							if(entered) {
+
+								userHP += ship->getInventory()->useItem(item6);
+								if(userHP > 754)
+									userHP = 754;
+								entered = false;
+							}
 							break;
 						}
-					}
-					if (entered) {
-						// condition
-						if (userHP > SCREEN_WIDTH - 35)
-							userHP = SCREEN_WIDTH - 35;
-						// condition
-						/*if (enemyHP > 265)
-						enemyHP = 265;
-						*/
-						entered = false;
 					}
 					break;
 				case 2: // Flee
@@ -528,7 +574,7 @@ bool Battle::shipBattle(Ship *ship) {
 					if (entered)
 						done = true;
 					break;
-				case 4:
+				case 4: // How to play
 					trix1 = SCREEN_WIDTH - 280 + 125;
 					trix2 = trix1;
 					trix3 = SCREEN_WIDTH - 260 + 125;
@@ -544,26 +590,20 @@ bool Battle::shipBattle(Ship *ship) {
 			}
 		}
 	}
-	if(enemyHP < 62)
-		enemyHP = 62;
-	else if(enemyHP == 62) {
+	if(enemyHP == 62) {
 		userTurn = false;
 		enemyTurn = false;
 		// go back to map
 		return true;
 	}
-
-	if(userHP < 528)
-		userHP = 528;
-	else if(userHP == 528) {
+	if(userHP == 528) {
 		userTurn = false;
 		enemyTurn = false;
 		// go to Game Over screen
 		return false;
 	}
+	return true;
 }
-
-
 
 bool Battle::bossBattle(Ship *ship) {
 	// create Boss object
@@ -571,8 +611,6 @@ bool Battle::bossBattle(Ship *ship) {
 	Nessy.setBossName("Nessy");
 
 	// assign appropriate sprite have it idle
-
-	// assign keys for commands
 
 	timer = al_create_timer(1.0/FPS);
 
@@ -647,22 +685,28 @@ bool Battle::bossBattle(Ship *ship) {
 					entered = false;
 					userTurn = false;
 					iter++;
-					if (iter > 4)
-						iter = 4;
+					if (iter > 5)
+						iter = 5;
+					if (iter == 5)
+						iter = 0;
 				}
 				if (attackMenu) {
 					entered = false;
 					userTurn = false;
 					attkIter++;
-					if (attkIter > 3)
-						attkIter = 3;
+					if (attkIter > 4)
+						attkIter = 4;
+					if(attkIter == 4)
+						attkIter = 0;
 				}
 				if (repairMenu) {
 					entered = false;
 					userTurn = false;
 					repaIter++;
-					if (repaIter > 5)
-						repaIter = 5;
+					if (repaIter > 6)
+						repaIter = 6;
+					if(repaIter == 6)
+						repaIter = 0;
 				}
 				drawn = true;
 				break;
@@ -704,6 +748,8 @@ bool Battle::bossBattle(Ship *ship) {
 				drawn = true;
 				break;
 			case ALLEGRO_KEY_RIGHT:
+				if(iter == -1)
+					iter = 3;
 				if (!attackMenu && !repairMenu) {
 					entered = false;
 					userTurn = false;
@@ -722,6 +768,7 @@ bool Battle::bossBattle(Ship *ship) {
 					else if (attkIter == 2 || attkIter == 3) {
 						attackMenu = false;
 						iter = 0;
+						attkIter = -1;
 					}
 				}
 				if (repairMenu) {
@@ -736,6 +783,7 @@ bool Battle::bossBattle(Ship *ship) {
 					else if (repaIter >= 3 || repaIter <= 5) {
 						repairMenu = false;
 						iter = 1;
+						repaIter = -1;
 					}
 				}
 				drawn = true;
@@ -762,9 +810,9 @@ bool Battle::bossBattle(Ship *ship) {
 
 			// Battle Screen Controls
 			if(iter == -1) {
-				al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, "HOW TO BATTLE:");
-				al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, "ARROW PAD to move cursor.");
-				al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "ENTER to select, END to deselect/reset.");
+				al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, "HOW TO BATTLE: ARROW PAD to move cursor.");
+				al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, "ENTER to select, END to deselect/reset.");
+				al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "Press DOWN key to start.");
 			}
 
 			if(drawn) {
@@ -779,10 +827,10 @@ bool Battle::bossBattle(Ship *ship) {
 					triy3 = SCREEN_HEIGHT - 120;
 					al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
 					// options: conditional statements to change text display but it would be easier if it was a const char *
-					al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->cannonBallItem->getItemName());
-					al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->scatterShotItem->getItemName());
-					al_draw_text(font, black, 240, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->chainShotItem->getItemName());
-					al_draw_text(font, black, 240, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->explosiveCannonballItem->getItemName());
+					al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getCannonballItem().getItemName());
+					al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getScatterShotItem().getItemName());
+					al_draw_text(font, black, 240, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getChainShotItem().getItemName());
+					al_draw_text(font, black, 240, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getExplosiveCannonballItem().getItemName());
 					if(attackMenu) {
 						switch(attkIter) {
 						case 0:
@@ -829,8 +877,8 @@ bool Battle::bossBattle(Ship *ship) {
 						case 0: // CannonBalls
 							if (entered) {
 								enemyHP -= ship->cannonball();
-								if(enemyHP < 35)
-									enemyHP = 35;
+								if(enemyHP < 62)
+									enemyHP = 62;
 								entered = false; // stops constant attack
 							}
 							al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "Firing Cannonballs!");
@@ -838,30 +886,26 @@ bool Battle::bossBattle(Ship *ship) {
 						case 1: // Scatter Shot
 							if (entered) {
 								enemyHP -= ship->scatterShot();
-								if(enemyHP < 35)
-									enemyHP = 35;
+								if(enemyHP < 62)
+									enemyHP = 62;
 								entered = false; // stops constant attack
 							}
 							al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "SCATTERSHOT, FIRE!!!");
-							al_draw_text(font, black, 40, SCREEN_HEIGHT - 45, ALLEGRO_ALIGN_LEFT, "Bojangles: HOMG STAAAHHHHP EEEET!!");
-							al_draw_text(font, black, 40, SCREEN_HEIGHT - 30, ALLEGRO_ALIGN_LEFT, "  YOU'RE BLOWING HOLES IN MY SHIP!");
 							break;
 						case 2: // Chain Shot
 							if (entered) {
 								enemyHP -= ship->chainShot();
-								if(enemyHP < 35)
-									enemyHP = 35;
+								if(enemyHP < 62)
+									enemyHP = 62;
 								entered = false; // stops constant attack
 							}
 							al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "Firing chain balls!");
-							al_draw_text(font, black, 40, SCREEN_HEIGHT - 45, ALLEGRO_ALIGN_LEFT, "They slowed down the enemy!");
-							al_draw_text(font, black, 40, SCREEN_HEIGHT - 30, ALLEGRO_ALIGN_LEFT, "Bojangles: YOU SON OF A BUTT!");
 							break;
 						case 3: // Explosive Cannonball
 							if (entered) {
 								enemyHP -= ship->explosiveCannonball();
-								if(enemyHP < 35)
-									enemyHP = 35;
+								if(enemyHP < 62)
+									enemyHP = 62;
 								entered = false; // stops constant attack
 							}
 							al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "BOOM goes the dynamite!");
@@ -878,22 +922,22 @@ bool Battle::bossBattle(Ship *ship) {
 						int n = rand()%6;
 						switch(n) {
 						case 0:
-							userHP -= Nessy.bite();
+							userHP -= userHP*(Nessy.bite()/100);
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
 							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "BOSS USED BITE!");
 							break;
 						case 1:
-							userHP -= Nessy.slime();
+							userHP -= userHP*(Nessy.slime()/100);
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
 							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "BOSS USED SLIME!");
 							break;
 						case 2:
-							userHP -= Nessy.fireBlast();
+							userHP -= userHP*(Nessy.fireBlast()/100);
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
 							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "BOSS USED FIREBLAST!");
 							break;
 						case 3:
-							userHP -= Nessy.waterBlast();
+							userHP -= userHP*(Nessy.waterBlast()/100);
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
 							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "BOSS USED WATERBLAST!");
 							break;
@@ -927,14 +971,20 @@ bool Battle::bossBattle(Ship *ship) {
 					triy3 = SCREEN_HEIGHT - 80;
 					al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
 					// Ship Repairs
-					al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->wood->getItemName());
-					al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, ship->getInventory()->rope->getItemName());
-					al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->tools->getItemName());
+					al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getWood().getItemName());
+					al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getRope().getItemName());
+					al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getTools().getItemName());
 					// Crew repairs
-					al_draw_text(font, black, 240, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->food->getItemName());
-					al_draw_text(font, black, 240, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->water->getItemName());
-					al_draw_text(font, black, 240, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, ship->getInventory()->booze->getItemName());
+					al_draw_text(font, black, 240, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getFood().getItemName());
+					al_draw_text(font, black, 240, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getWater().getItemName());
+					al_draw_text(font, black, 240, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, ship->getInventory()->getBooze().getItemName());
 					if(repairMenu) {
+						Item item1 = ship->getInventory()->getWood();
+						Item item2 = ship->getInventory()->getRope();
+						Item item3 = ship->getInventory()->getTools();
+						Item item4 = ship->getInventory()->getFood();
+						Item item5 = ship->getInventory()->getWater();
+						Item item6 = ship->getInventory()->getBooze();
 						switch(repaIter) {
 						case 0: // wood
 							trix1 = 20;
@@ -945,10 +995,9 @@ bool Battle::bossBattle(Ship *ship) {
 							triy3 = SCREEN_HEIGHT - 120;
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
 							if (entered) {
-								Item *item = ship->getInventory->wood;
-								userHP += ship->getInventory()->useItem(*item);
-								if (userHP > SCREEN_WIDTH - 35)
-									userHP = SCREEN_WIDTH - 35;
+								userHP += ship->getInventory()->useItem(item1);
+								if (userHP > 754)
+									userHP = 754;
 								entered = false;
 							}
 							break;
@@ -961,10 +1010,9 @@ bool Battle::bossBattle(Ship *ship) {
 							triy3 = SCREEN_HEIGHT - 90;
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
 							if (entered) {
-								Item *item = ship->getInventory->rope;
-								userHP += ship->getInventory()->useItem(*item);
-								if (userHP > SCREEN_WIDTH - 35)
-									userHP = SCREEN_WIDTH - 35;
+								userHP += ship->getInventory()->useItem(item2);
+								if (userHP > 754)
+									userHP = 754;
 								entered = false;
 							}
 							break;
@@ -977,10 +1025,9 @@ bool Battle::bossBattle(Ship *ship) {
 							triy3 = SCREEN_HEIGHT - 60;
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
 							if (entered) {
-								Item *item = ship->getInventory->tools;
-								userHP += ship->getInventory()->useItem(*item);
-								if (userHP > SCREEN_WIDTH - 35)
-									userHP = SCREEN_WIDTH - 35;
+								userHP += ship->getInventory()->useItem(item3);
+								if (userHP > 754)
+									userHP = 754;
 								entered = false;
 							}
 							break;
@@ -993,10 +1040,9 @@ bool Battle::bossBattle(Ship *ship) {
 							triy3 = SCREEN_HEIGHT - 120;
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
 							if (entered) {
-								Item *item = ship->getInventory->food;
-								userHP += ship->getInventory()->useItem(*item);
-								if (userHP > SCREEN_WIDTH - 35)
-									userHP = SCREEN_WIDTH - 35;
+								userHP += ship->getInventory()->useItem(item4);
+								if (userHP > 754)
+									userHP = 754;
 								entered = false;
 							}
 							break;
@@ -1009,10 +1055,9 @@ bool Battle::bossBattle(Ship *ship) {
 							triy3 = SCREEN_HEIGHT - 90;
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
 							if (entered) {
-								Item *item = ship->getInventory->water;
-								userHP += ship->getInventory()->useItem(*item);
-								if (userHP > SCREEN_WIDTH - 35)
-									userHP = SCREEN_WIDTH - 35;
+								userHP += ship->getInventory()->useItem(item5);
+								if (userHP > 754)
+									userHP = 754;
 								entered = false;
 							}
 							break;
@@ -1025,10 +1070,9 @@ bool Battle::bossBattle(Ship *ship) {
 							triy3 = SCREEN_HEIGHT - 60;
 							al_draw_filled_triangle(trix1, triy1, trix2, triy2, trix3, triy3, black);
 							if (entered) {
-								Item *item = ship->getInventory->booze;
-								userHP += ship->getInventory()->useItem(*item);
-								if (userHP > SCREEN_WIDTH - 35)
-									userHP = SCREEN_WIDTH - 35;
+								userHP += ship->getInventory()->useItem(item6);
+								if (userHP > 754)
+									userHP = 754;
 								entered = false;
 							}
 							break;
@@ -1085,23 +1129,19 @@ bool Battle::bossBattle(Ship *ship) {
 			}
 		}
 	}
-	if(enemyHP < 62)
-		enemyHP = 62;
-	else if(enemyHP == 62) {
+	if(enemyHP == 62) {
 		userTurn = false;
 		enemyTurn = false;
 		// go back to map
 		return true;
 	}
-
-	if(userHP < 528)
-		userHP = 528;
-	else if(userHP == 528) {
+	if(userHP == 528) {
 		userTurn = false;
 		enemyTurn = false;
 		// go to Game Over screen
 		return false;
 	}
+	return true;
 }
 
 
