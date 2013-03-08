@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "Player.h"
 #include "introScreen.h"
+#include "InventoryDisplay.h"
 
 //using namespace std;
 
@@ -64,6 +65,8 @@ int main(void)
 	bool howScreenOn = false; //bool for whether to display the how to play screen
 	bool playGame = false; //bool to turn on the actual playable part of the game(ship movement)
 
+	bool showInventory = false;
+
 	bool draw = true; // bool for drawing ship
 	bool active = false;
 
@@ -99,7 +102,7 @@ int main(void)
 	al_init_image_addon();
 
 	ALLEGRO_KEYBOARD_STATE keyState; //Gets the current state of keyboard
-	player1.player = al_load_bitmap("Boat.png");
+	player1.player = al_load_bitmap("Boat2.png");
 	ALLEGRO_BITMAP *background = al_load_bitmap("Background.png"); //Load background picture
 	ALLEGRO_BITMAP *player2 = al_load_bitmap("Boat.png");
 
@@ -155,10 +158,10 @@ int main(void)
 	//al_draw_filled_rectangle(0, 0,800,600,al_map_rgb(0,0,255)); //TEMPORARY filler for launch game~for now consider BlueScreen as the game
 	//al_flip_display();
 	//al_show_native_message_box(display, "MessageBox Title", "Error", "Display window could not be shown", NULL, ALLEGRO_MESSAGEBOX_ERROR);
-	}
+	
+	Inventory playerInventory;
+	InventoryDisplay playerInventoryDisplay;
 	while (playGame){
-		//al_draw_filled_rectangle(0, 0,800,600,al_map_rgb(0,0,255)); //TEMPORARY filler for launch game~for now consider BlueScreen as the game
-		//al_flip_display();
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
 		al_get_keyboard_state(&keyState);
@@ -170,10 +173,55 @@ int main(void)
 			switch(events.keyboard.keycode)
 			{
 				case ALLEGRO_KEY_ESCAPE:
-				playGame = false;
-			} 
-		}
+					{
+					playGame = false;
+					}
+				case ALLEGRO_KEY_1:
+					{
+				//add in inventory and display here to test~should go somewhere else later
+					//Inventory playerInventory;
+					//InventoryDisplay playerInventoryDisplay;
+					/*if(!showInventory){
+						showInventory = true;
+						playerInventoryDisplay.setShowDisplay(true);
+						al_flip_display();*/
+						if(!showInventory){
+							showInventory = true;
+							playerInventoryDisplay.setActive(true);
+						}
+						else if (showInventory){
+							showInventory = false;
+							playerInventoryDisplay.setActive(false);
+						}
+						//playerInventoryDisplay.setShowDisplay(true);
+						//playerInventoryDisplay.displayScreen(playerInventory);
+
+						/*while(showInventory){
+							playerInventoryDisplay.displayScreen(playerInventory);
+							/*if (events.type == ALLEGRO_EVENT_KEY_DOWN){
+								switch(events.keyboard.keycode){
+								case ALLEGRO_KEY_1:
+									showInventory = false;
+								}
+							}	
+						}
+					}*/
+					}
+			}
 		
+			while (showInventory){
+				playerInventoryDisplay.setShowDisplay(true);
+				//while(playerInventoryDisplay.getShowDisplay()){
+					if (playerInventoryDisplay.getActive()){
+						playerInventoryDisplay.displayScreen(playerInventory);
+						if(!playerInventoryDisplay.getShowDisplay()){
+							playerInventoryDisplay.setShowDisplay(false);
+							showInventory = false;
+						}
+					}
+				//}
+			}
+		}
 	else if(events.type == ALLEGRO_EVENT_TIMER)
 	{
 			active = true; //THERE IS A KEY BEING PRESSED
@@ -259,7 +307,7 @@ int main(void)
 			if(active)
 				sourceX += al_get_bitmap_width(player1.player) / 4;
 			else
-				sourceX = 161;
+				sourceX = 102;
 
 			if(sourceX >= al_get_bitmap_width(player1.player))
 				sourceX = 0;
@@ -274,7 +322,7 @@ int main(void)
 		 {
 			al_draw_bitmap(background, 0, 0, NULL);
 			al_draw_bitmap_region(player2, 0, 0, 161, 161, 200, 200, NULL);
-			al_draw_bitmap_region(player1.player, sourceX, sourceY*al_get_bitmap_height(player1.player) / 4, 161, 161,
+			al_draw_bitmap_region(player1.player, sourceX, sourceY*al_get_bitmap_height(player1.player) / 4, 102, 102,
 				player1.x, player1.y, NULL);
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0,0,0));
@@ -283,7 +331,7 @@ int main(void)
 		
 	}
 	//END OF THE GAME LOOP
-	
+	}
 
 	al_destroy_display(display);//Destructor
 	al_destroy_timer(timer);
