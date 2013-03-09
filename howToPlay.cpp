@@ -17,8 +17,6 @@ HowToPlay::HowToPlay(){
 void HowToPlay::makeHowToPlayScreen(){
 	//when activated, show the "how to play" screen
 	//when a button/key is clicked/pressed : erase this to show the introscreen again
-	//the click/button settings from introscreen might still be active, so might have to handle this differently
-	//i.e. by killing introscreen, loading "how to play" screen, then killing it and reloading introscreen upon action.
 	ALLEGRO_EVENT_QUEUE *event_queueH = NULL;
 
 	//al_init_font_addon();
