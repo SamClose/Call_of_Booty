@@ -9,7 +9,7 @@
 #include "Camera.h"
 #include "Player.h"
 #include "introScreen.h"
-#include "InventoryDisplay.h"
+//#include "InventoryDisplay.h"
 
 //using namespace std;
 
@@ -65,7 +65,7 @@ int main(void)
 	bool howScreenOn = false; //bool for whether to display the how to play screen
 	bool playGame = false; //bool to turn on the actual playable part of the game(ship movement)
 
-	bool showInventory = false;
+	//bool showInventory = false;
 
 	bool draw = true; // bool for drawing ship
 	bool active = false;
@@ -153,14 +153,15 @@ int main(void)
 								howScreenOn = false;
 							}
 						}
-					}
+			}
 		}
 	//al_draw_filled_rectangle(0, 0,800,600,al_map_rgb(0,0,255)); //TEMPORARY filler for launch game~for now consider BlueScreen as the game
 	//al_flip_display();
 	//al_show_native_message_box(display, "MessageBox Title", "Error", "Display window could not be shown", NULL, ALLEGRO_MESSAGEBOX_ERROR);
 	
-	Inventory playerInventory;
-	InventoryDisplay playerInventoryDisplay;
+	//Inventory playerInventory;
+	//InventoryDisplay playerInventoryDisplay;
+
 	while (playGame){
 		ALLEGRO_EVENT events;
 		al_wait_for_event(event_queue, &events);
@@ -176,6 +177,7 @@ int main(void)
 					{
 					playGame = false;
 					}
+					/*
 				case ALLEGRO_KEY_1:
 					{
 				//add in inventory and display here to test~should go somewhere else later
@@ -184,7 +186,7 @@ int main(void)
 					/*if(!showInventory){
 						showInventory = true;
 						playerInventoryDisplay.setShowDisplay(true);
-						al_flip_display();*/
+						al_flip_display();*//*
 						if(!showInventory){
 							showInventory = true;
 							playerInventoryDisplay.setActive(true);
@@ -205,22 +207,23 @@ int main(void)
 								}
 							}	
 						}
-					}*/
-					}
+					}*//*
+					} */
 			}
-		
+	/*	
 			while (showInventory){
 				playerInventoryDisplay.setShowDisplay(true);
 				//while(playerInventoryDisplay.getShowDisplay()){
-					if (playerInventoryDisplay.getActive()){
+					//if (playerInventoryDisplay.getActive()){
 						playerInventoryDisplay.displayScreen(playerInventory);
 						if(!playerInventoryDisplay.getShowDisplay()){
 							playerInventoryDisplay.setShowDisplay(false);
 							showInventory = false;
 						}
-					}
+					//}
 				//}
 			}
+			*/
 		}
 	else if(events.type == ALLEGRO_EVENT_TIMER)
 	{
