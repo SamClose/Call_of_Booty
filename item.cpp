@@ -3,11 +3,6 @@ using namespace std;
 
 Item::Item() {}
 
-Item::Item(const char *name, string type) {
-	itemName = name;
-	itemType = type;
-}
-
 Item::~Item() {}
 
 // need to change this to const char * instead for allegro al_draw_text()
