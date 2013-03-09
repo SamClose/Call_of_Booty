@@ -6,8 +6,6 @@
 #include <allegro5/allegro_ttf.h>
 
 #include "battle.h"
-#include "boss.h"
-#include "enemyShip.h"
 
 #include <iostream>
 #include <time.h>
@@ -19,7 +17,7 @@ Battle::Battle() {
 	enemyHP = 280;
 	userHP = 754;
 
-	// initializing
+	// initializing just in case
 	al_init_font_addon();
 	al_init_image_addon();
 	al_init_primitives_addon();
@@ -31,7 +29,10 @@ Battle::Battle() {
 	red = al_map_rgb(255,0,0);
 	white = al_map_rgb(255,255,255);
 
+	// font
 	font = al_load_ttf_font("PressStart2P.ttf", 10, 0);
+
+	// image
 	battleBG = al_load_bitmap("mermaid-2-blue-water.jpg");
 
 	if(!battleBG)
@@ -69,8 +70,11 @@ bool Battle::shipBattle(Ship *ship) {
 	EnemyShip *enemy = new EnemyShip();
 	enemy->setInventory();
 	// randomly create a name
-
+	string enemyNames[] = {"Bojangles", "Hook", "Lil' John", "Davy Jones", "Cpt. Bewb Bosa" };
+	srand(time(NULL));
+	int name = rand()%5;
 	// assign appropriate sprite
+	this->enemyName = enemyNames[name].c_str();
 
 	timer = al_create_timer(1.0/FPS);
 	eventQueue = al_create_event_queue();
