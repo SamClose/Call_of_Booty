@@ -20,7 +20,6 @@ private:
 
 public:
 	Item();
-	Item(const char *name, string type);
 	virtual ~Item();
 
 	const char *getItemName();
