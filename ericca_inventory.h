@@ -16,7 +16,6 @@ private:
 	// 5: explosive cannonballs limit 3
 	int inventorySpace[6];
 
-	
 	Item food, water, booze,
 		wood, tools, rope, 
 		cannonballItem, scatterShotItem, 
@@ -33,34 +32,15 @@ public:
 	int useItem(Item);
 
 	Item getFood();
-	void setFood(Item);
-
 	Item getWater();
-	void setWater(Item);
-
 	Item getBooze();
-	void setBooze(Item);
-
 	Item getWood();
-	void setWood(Item);
-
 	Item getTools();
-	void setTools(Item);
-
 	Item getRope();
-	void setRope(Item);
-
 	Item getCannonballItem();
-	void setCannonballItem(Item);
-
 	Item getScatterShotItem();
-	void setScatterShotItem(Item);
-
 	Item getChainShotItem();
-	void setChainShotItem(Item);
-
 	Item getExplosiveCannonballItem();
-	void setExplosiveCannonballItem(Item);
 
 	int getFilledSpace();
 	void setFilledSpace(int);
