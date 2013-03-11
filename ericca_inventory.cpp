@@ -1,9 +1,8 @@
 #include "inventory.h"
+
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
-
-using namespace std;
 
 Inventory::Inventory() : filledSpace(0), emptySpace(MAX_SPACE) {
 	// creating items
@@ -85,7 +84,7 @@ void Inventory::addItem(Item item) {
 		emptySpace = MAX_SPACE - filledSpace;
 	}
 	else
-		cout << "Inventory is full!" << endl;
+		std::cout << "Inventory is full!" << std::endl;
 }
 
 int Inventory::useItem(Item item) {
