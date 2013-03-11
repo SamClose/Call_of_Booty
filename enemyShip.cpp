@@ -1,6 +1,4 @@
-
 #include "enemyShip.h"
-using namespace std;
 
 EnemyShip::~EnemyShip() { inventory->~Inventory(); }
 
