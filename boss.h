@@ -1,7 +1,6 @@
 #ifndef BOSS_H
 #define BOSS_H
 
-using namespace std;
 class Boss {
 private:
 	static const int MAX_HEALTH = 1000;
