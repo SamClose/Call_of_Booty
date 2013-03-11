@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 #include "ship.h"
-using namespace std;
 
 // assigns attribute values subject to change
 Ship::Ship() : health(MAX_HEALTH), attack(MAX_ATTACK), speed(MAX_SPEED) {}
