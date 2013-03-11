@@ -2,7 +2,6 @@
 #include <time.h>
 
 #include "boss.h"
-using namespace std;
 
 // Constructor
 Boss::Boss() {
