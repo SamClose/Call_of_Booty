@@ -4,13 +4,14 @@
 #include "inventory.h"
 #include "crew.h"
 using namespace std;
+
 class Ship {
 private:
 	static const int MAX_HEALTH = 100;
 	static const int MAX_ATTACK = 20;
 	static const int MAX_SPEED = 10;
 
-	Inventory inventory;
+	Inventory *inventory;
 	Crew crew;
 	
 	const char *shipName;
@@ -27,7 +28,7 @@ public:
 
 	const char *getShipName();
 	void setShipName(const char *name);
-	
+
 	int getAttack();
 	void setAttack(int);
 
@@ -41,6 +42,8 @@ public:
 	int chainShot();
 	int explosiveCannonball();
 	int scatterShot();
+
+	Inventory *getInventory();
 
 	void addItem(Item);
 	void useItem(Item);
