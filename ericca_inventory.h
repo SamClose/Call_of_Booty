@@ -2,7 +2,6 @@
 #define INVENTORY_H
 
 #include "item.h"
-using namespace std;
 
 class Inventory {
 private:
