@@ -3,7 +3,6 @@
 
 #include "inventory.h"
 #include "crew.h"
-using namespace std;
 
 class Ship {
 private:
@@ -47,6 +46,5 @@ public:
 
 	void addItem(Item);
 	void useItem(Item);
-
 };
 #endif
