@@ -1,7 +1,6 @@
 #ifndef CREW_H
 #define CREW_H
 
-using namespace std;
 class Crew {
 private:
 	// subject to change
