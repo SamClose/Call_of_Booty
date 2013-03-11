@@ -1,8 +1,7 @@
 #include "crew.h"
+
 #include <time.h>
 #include <stdlib.h>
-
-using namespace std;
 
 Crew::Crew() {
 	srand(time(NULL));
