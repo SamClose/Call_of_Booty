@@ -5,19 +5,20 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 
-#include "battle.h"
+#include "battleScreen.h"
+#include "enemyShip.h"
+#include "boss.h"
 
-#include <iostream>
 #include <time.h>
 #include <stdlib.h>
+#include <iostream>
 
-using namespace std;
-
-Battle::Battle() {
+BattleScreen::BattleScreen(Ship* ship) {
+	this->ship = ship;
+	userName = this->ship->getShipName();
 	enemyHP = 280;
 	userHP = 754;
 
-	// initializing just in case
 	al_init_font_addon();
 	al_init_image_addon();
 	al_init_primitives_addon();
@@ -36,15 +37,18 @@ Battle::Battle() {
 	battleBG = al_load_bitmap("mermaid-2-blue-water.jpg");
 
 	if(!battleBG)
-		cerr << "Failed to load image. Use full path instead." << endl;
+		std::cerr << "Failed to load image. Use full path instead." << std::endl;
 }
 
-Battle::~Battle() {
+BattleScreen::~BattleScreen() {
 	al_destroy_event_queue(eventQueue);
 	al_destroy_timer(timer);
 }
 
-void Battle::draw() {
+void BattleScreen::draw() { 
+	// Background Image
+	al_draw_bitmap(battleBG, 0, 0, 0);
+
 	// Attack description box
 	al_draw_filled_rectangle(0, SCREEN_HEIGHT - 150, SCREEN_WIDTH, SCREEN_HEIGHT, black);
 	al_draw_filled_rounded_rectangle(5, SCREEN_HEIGHT - 155, SCREEN_WIDTH - 300, SCREEN_HEIGHT - 5, 10, 10, white);
@@ -62,15 +66,17 @@ void Battle::draw() {
 	al_draw_text(font, black, SCREEN_WIDTH - 130, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, "EXIT GAME");
 	al_draw_text(font, black, SCREEN_WIDTH - 130, SCREEN_HEIGHT - 85, ALLEGRO_ALIGN_LEFT, "BUTTS");
 
+	
+
 	al_flip_display();
 }
 
-bool Battle::shipBattle(Ship *ship) {
+bool BattleScreen::shipBattle() {
 	// create an EnemyShip object
 	EnemyShip *enemy = new EnemyShip();
 	enemy->setInventory();
 	// randomly create a name
-	string enemyNames[] = {"Bojangles", "Hook", "Lil' John", "Davy Jones", "Cpt. Bewb Bosa" };
+	std::string enemyNames[] = {"Bojangles", "Hook", "Lil' John", "Davy Jones", "Cpt. Bewb Bosa" };
 	srand(time(NULL));
 	int name = rand()%5;
 	// assign appropriate sprite
@@ -385,10 +391,13 @@ bool Battle::shipBattle(Ship *ship) {
 							enemyTurn = true;
 							break;
 						}
+						al_draw_bitmap(battleBG, 0, 0, 0);
+						draw();
 						update();
 						al_rest(1);
 						userTurn = false;
 						enemyTurn = true;
+						al_flip_display();
 					}
 					if(enemyTurn && enemyHP != 62) {
 						Item item1 = enemy->getInventory()->getWood();
@@ -609,7 +618,7 @@ bool Battle::shipBattle(Ship *ship) {
 	return true;
 }
 
-bool Battle::bossBattle(Ship *ship) {
+bool BattleScreen::bossBattle() {
 	// create Boss object
 	Boss Nessy = Boss();
 	Nessy.setBossName("Nessy");
@@ -796,7 +805,7 @@ bool Battle::bossBattle(Ship *ship) {
 		}
 		if(redraw && al_is_event_queue_empty(eventQueue)) {
 			redraw = false;
-
+			al_draw_bitmap(battleBG, 0, 0, 0);
 			draw();
 
 			// notifies if it has been selected
@@ -956,11 +965,15 @@ bool Battle::bossBattle(Ship *ship) {
 							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "BOSS USED TIDALWAVE!");
 							break;
 						}
+						al_draw_bitmap(battleBG, 0, 0, 0);
+						draw();
 						update();
 						al_rest(2);
 						enemyTurn = false;
 					}
 					else {
+						al_draw_bitmap(battleBG, 0, 0, 0);
+						draw();
 						al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
 						al_draw_text(font, black, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "USER TURN! Select an attack.");
 						update();
@@ -1149,7 +1162,7 @@ bool Battle::bossBattle(Ship *ship) {
 }
 
 
-void Battle::update() {
+void BattleScreen::update() {
 	// Enemy HP box
 	al_draw_filled_rounded_rectangle(20, 20, 300, 75, 5, 3, white);
 	al_draw_rounded_rectangle(20, 20, 300, 75, 5, 3, black, 3);
