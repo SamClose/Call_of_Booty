@@ -2,7 +2,6 @@
 #define ITEM_H
 
 #include <string>
-using namespace std;
 
 // Create subclasses i.e.
 //		food: fruit, water, meat, bread, cheese
@@ -15,7 +14,7 @@ using namespace std;
 class Item {
 private:
 	const char *itemName;
-	string itemType;
+	std::string itemType;
 	int attackBonus, healthBonus, speedBonus;
 
 public:
@@ -25,8 +24,8 @@ public:
 	const char *getItemName();
 	void setItemName(const char *name);
 
-	string getItemType();
-	void setItemType(string);
+	std::string getItemType();
+	void setItemType(std::string);
 
 	int getAttackBonus();
 	void setAttackBonus(int);
