@@ -1,15 +1,19 @@
-#ifndef BATTLE_H
-#define BATTLE_H
+#ifndef BATTLE_SCREEN_H
+#define BATTLE_SCREEN_H
+
+#include "allegro5\allegro.h"
+#include "allegro5\allegro_font.h"
+#include "allegro5\allegro_ttf.h"
 
 #include "ship.h"
-using namespace std;
 
-class Battle {
+class BattleScreen {
 private:
+	Ship *ship;
 	// default display size
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;
-	static const int FPS = 60;
+	static const int FPS = 30;
 
 	// Ship's side view sprite
 	ALLEGRO_BITMAP *player;
@@ -38,19 +42,19 @@ private:
 
 public:
 	// sets private attributes
-	Battle();
+	BattleScreen(Ship*);
 	// destroys timer and eventQueue
-	~Battle();
+	~BattleScreen();
 
 	// creates an enemy
 	// takes in a premade Ship class
 	// user gets to attack first
 	// switch if it's user turn or enemy's turn
 	// use randomizer to select attacks
-	bool shipBattle(Ship*); 
-	bool bossBattle(Ship*);
+	bool shipBattle(); 
+	bool bossBattle();
 
-	// If return 1 -> user won go to Map
-	// If return 0 -> user lost go to GameOver	
+	// If return true -> user won go to Map
+	// If return false -> user lost go to GameOver	
 };
 #endif
