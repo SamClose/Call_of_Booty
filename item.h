@@ -1,39 +1,26 @@
-#ifndef ITEM_H
-#define ITEM_H
+#include "item.h"
 
-#include <string>
+Item::Item() {}
 
-// Create subclasses i.e.
-//		food: fruit, water, meat, bread, cheese
-//		weapons: cannonballs, scattershot, chainballs, explosive cannonballs
-//		booze: wine, beer, rum, whiskey
-//	Modifications: can make formulas to create certain items like mast, sails, chassy
-//			this is the simplest form to finish game
-//		repair: tools, wood (1 tool + 1 wood = % shipHealth)
+Item::~Item() {}
 
-class Item {
-private:
-	const char *itemName;
-	std::string itemType;
-	int attackBonus, healthBonus, speedBonus;
+// need to change this to const char * instead for allegro al_draw_text()
+const char *Item::getItemName() { return itemName; }
+// need to change string name to const char * name instead for allegro al_draw_text()
+void Item::setItemName(const char *name) { itemName = name; }
 
-public:
-	Item();
-	virtual ~Item();
+std::string Item::getItemType() { return itemType; }
 
-	const char *getItemName();
-	void setItemName(const char *name);
+void Item::setItemType(std::string type) { itemType = type; }
 
-	std::string getItemType();
-	void setItemType(std::string);
+int Item::getAttackBonus() { return attackBonus; }
 
-	int getAttackBonus();
-	void setAttackBonus(int);
-	
-	int getHealthBonus();
-	void setHealthBonus(int);
+void Item::setAttackBonus(int bonus) { attackBonus = bonus; }
 
-	int getSpeedBonus();
-	void setSpeedBonus(int);
-};
-#endif
+int Item::getHealthBonus() { return healthBonus; }
+
+void Item::setHealthBonus(int bonus) { healthBonus = bonus; }
+
+int Item::getSpeedBonus() { return speedBonus; }
+
+void Item::setSpeedBonus(int bonus) { speedBonus = bonus; }
