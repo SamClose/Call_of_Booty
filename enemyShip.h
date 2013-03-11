@@ -3,7 +3,7 @@
 
 #include "ship.h"
 #include "inventory.h"
-using namespace std;
+
 class EnemyShip : public Ship {
 private:
 	static const int MAX_ATTACK = 25;
@@ -23,6 +23,7 @@ public:
 		health = MAX_HEALTH;
 		speed = MAX_SPEED;
 	};
+
 	// deallocates space
 	~EnemyShip();
 
