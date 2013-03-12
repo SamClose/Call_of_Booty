@@ -1,84 +1,50 @@
-#include <iostream>
-#include <time.h>
-#include <stdlib.h>
+#ifndef SHIP_H
+#define SHIP_H
 
-#include "ship.h"
+#include "inventory.h"
+#include "crew.h"
 
-// assigns attribute values subject to change
-Ship::Ship() : health(MAX_HEALTH), attack(MAX_ATTACK), speed(MAX_SPEED) {}
+class Ship {
+private:
+	static const int MAX_HEALTH = 100;
+	static const int MAX_ATTACK = 20;
+	static const int MAX_SPEED = 10;
 
-// deallocates array memory
-Ship::~Ship() { inventory->~Inventory(); }
+	Inventory *inventory;
+	Crew crew;
+	
+	const char *shipName;
 
-Inventory *Ship::getInventory() { return inventory; }
+	// speed can be used for a wait time or increases attack
+	int attack, health, speed;
 
-void Ship::addItem(Item item) { inventory->addItem(item); }
+public:
+	Ship();
+	virtual ~Ship();
 
-int Ship::useItem(Item item) {
-	if(item.getItemType() == "food") {
-		return getHealth() + inventory->useItem(item);
+	void setCrew();
+	void setInventory();
 
-	}
-	if(item.getItemType() == "repair") {
-		return getHealth() + inventory->useItem(item);
-	}
-	if(item.getItemType() == "weapon") {
-		return MAX_ATTACK + inventory->useItem(item);
-	}
-}
+	const char *getShipName();
+	void setShipName(const char *name);
 
-void Ship::setCrew() {
-	crew = Crew();
-}
+	int getAttack();
+	void setAttack(int);
 
-void Ship::setInventory() {
-	inventory = new Inventory();	
-}
-// gives the most damage to enemy
-int Ship::explosiveCannonball() { 
-	// picks a number between MAX_ATTACK and half of ship's health
-	int n = attack + rand()%(280/2);
-	return n;
-}
+	int getHealth();
+	void setHealth(int);
 
-// designed to give extensive damage to enemy
-int Ship::cannonball() {
-	// randomly picks a number between 10 and the attack
-	int n = 10 + rand()%attack;
-	return n;
-}
+	int getSpeed();
+	void setSpeed(int);
 
-// reduces enemy's speed
-int Ship::chainShot() {
-	// randomly picks a number between 1 and the speed
-	int n = 1 + rand()%speed;
-	return n;
-}
+	int cannonball();
+	int chainShot();
+	int explosiveCannonball();
+	int scatterShot();
 
-// 60% attack 30% speed reduction
-int Ship::scatterShot() {
-	// probably be around 5 to 10
-	int a = 5 + rand()%(attack/2);
-	// be around 1 to 7
-	int b = 1 + rand()%(speed - 3);
-	return (a + b);
-}
+	Inventory *getInventory();
 
-// Getters and Setters
-// need to change this to const char * instead for allegro al_draw_text()
-const char *Ship::getShipName() { return shipName; }
-
-int Ship::getHealth() { return health; }
-
-int Ship::getAttack() { return attack; }
-
-int Ship::getSpeed() { return speed; }
-
-void Ship::setShipName(const char *name) { shipName = name; }
-
-void Ship::setHealth(int num) { health = num; }
-
-void Ship::setAttack(int num) { attack = num; }
-
-void Ship::setSpeed(int num) { speed = num; }
-/* End of ship.cpp */
+	void addItem(Item);
+	int useItem(Item);
+};
+#endif
