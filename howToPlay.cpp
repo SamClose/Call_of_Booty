@@ -33,10 +33,18 @@ void HowToPlay::makeHowToPlayScreen(){
 	ALLEGRO_BITMAP *skull = al_load_bitmap("skull.png");
 	al_draw_bitmap(skull,0,0,NULL);
 
-	ALLEGRO_FONT *font = al_load_font("Pirate.ttf", 45, NULL);
-	al_draw_text(font, al_map_rgb(255,0,0),400,75,ALLEGRO_ALIGN_CENTER,"Use the arrow keys to move around the map");
-	al_draw_text(font, al_map_rgb(255,0,0),400,175,ALLEGRO_ALIGN_CENTER,"Filler text, hopefully something else can be added");
-	al_draw_text(font, al_map_rgb(255,0,0),400,500,ALLEGRO_ALIGN_CENTER,"Click anywhere to go back");
+	ALLEGRO_FONT *font = al_load_font("Pirate.ttf", 57, NULL);
+	al_draw_text(font, al_map_rgb(255,0,0),400,30,ALLEGRO_ALIGN_CENTER,"Use the arrow keys to move around the map");
+
+	al_draw_text(font, al_map_rgb(255,0,0),400,115,ALLEGRO_ALIGN_CENTER,"When in battle,");
+	al_draw_text(font, al_map_rgb(255,0,0),400,155,ALLEGRO_ALIGN_CENTER,"use the arrow keys to select an action");
+
+	al_draw_text(font, al_map_rgb(255,0,0),400,240,ALLEGRO_ALIGN_CENTER,"Capture a port by defeating its defenses");
+
+	al_draw_text(font, al_map_rgb(255,0,0),400,325,ALLEGRO_ALIGN_CENTER,"Capture all ports to discover the location");
+	al_draw_text(font, al_map_rgb(255,0,0),400,370,ALLEGRO_ALIGN_CENTER,"of the hidden treasure");
+
+	al_draw_text(font, al_map_rgb(255,0,0),400,500,ALLEGRO_ALIGN_CENTER,"Click anywhere to return to the main menu");
 	al_flip_display();
 
 	setHowDone(false);
