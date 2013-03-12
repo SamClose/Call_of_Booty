@@ -22,24 +22,26 @@ int Boss::slime() {
 }
 
 int Boss::fireBlast() {
+	int newAttack = attack - 30;
 	srand(time(NULL));
-	return MIN_ATTACK + rand()%(attack*(2/3));
+	return MIN_ATTACK + rand()%(newAttack);
 }
 
 int Boss::waterBlast() {
+	int newAttack = attack - 60;
 	srand(time(NULL));
-	return MIN_ATTACK + rand()%(attack/3);
+	return MIN_ATTACK + rand()%(newAttack);
 }
 
-void Boss::defend(int attack) {
+int Boss::defend(int attack) {
 	srand(time(NULL));
 	int def = MIN_DEFENSE + rand()%(MAX_DEFENSE);
-	setHealth(def - attack);
+	return attack - def;
 }
 
-void Boss::tidalWave() {
+int Boss::tidalWave() {
 	if(health != MAX_HEALTH) 
-		setHealth(health + 10);
+		return 40;
 }
 
 const char *Boss::getBossName() { return bossName; }
