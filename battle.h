@@ -13,10 +13,15 @@ private:
 	// default display size
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;
-	static const int FPS = 30;
+	static const int FPS = 25;
 
 	// Ship's side view sprite
 	ALLEGRO_BITMAP *player;
+	// Enemy ship's side view sprite
+	ALLEGRO_BITMAP *pirate;
+	// Boss sprite
+	ALLEGRO_BITMAP *serpent;
+	// water background
 	ALLEGRO_BITMAP *battleBG;
 
 	ALLEGRO_COLOR black;
@@ -35,6 +40,21 @@ private:
 
 	const char *enemyName, *userName;
 
+	// draw or don't draw
+	bool attackMenu;
+	bool done;
+	bool drawn;
+	bool enemyTurn;
+	bool entered;
+	bool redraw;
+	bool repairMenu;
+	bool userTurn;
+
+	// Switch cases
+	int attkIter;
+	int iter;
+	int repaIter;
+
 	// draws battle screen
 	void draw();
 	// updates HP bars
@@ -51,10 +71,11 @@ public:
 	// user gets to attack first
 	// switch if it's user turn or enemy's turn
 	// use randomizer to select attacks
-	bool shipBattle(); 
-	bool bossBattle();
+	int shipBattle(); 
+	int bossBattle();
 
-	// If return true -> user won go to Map
-	// If return false -> user lost go to GameOver	
+	// if 1 main.cpp
+	// if 0 close display
+	// if -1 gameOver()
 };
 #endif
