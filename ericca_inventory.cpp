@@ -90,40 +90,28 @@ void Inventory::addItem(Item item) {
 int Inventory::useItem(Item item) {
 	if (filledSpace > 0) {
 		if(item.getItemType() == "repair") {
-			if (item.getItemName() == "WOOD")
-				return item.getHealthBonus();
-			else if (item.getItemName() == "TOOLS")
-				return item.getHealthBonus();
-			else if (item.getItemName() == "ROPE")
-				return item.getHealthBonus();
+			return item.getHealthBonus();
 			inventorySpace[0]--;
 		}
 		else if (item.getItemType() == "food") {
-			if(item.getItemName() == "FOOD")
-				return item.getHealthBonus();
-			else if (item.getItemName() == "WATER")
-				return item.getHealthBonus();
-			else if (item.getItemName() == "BOOZE")
-				return item.getHealthBonus();
+			return item.getHealthBonus();
 			inventorySpace[1]--;
 		}
 		else if (item.getItemType() == "weapon") {
 			if (item.getItemName() == "CANNONBALL") {
 				inventorySpace[2]--;
-				return item.getAttackBonus();
 			}
 			else if(item.getItemName() == "SCATTERSHOT") {
 				inventorySpace[3]--;
-				return item.getAttackBonus();
 			}
 			else if (item.getItemName() == "CHAINSHOT") {
 				inventorySpace[4]--;
-				return item.getSpeedBonus();
 			}
 			else if (item.getItemName() == "EXP. CANNONBALL") {
 				inventorySpace[5]--;
 				return 0;
 			}
+			return item.getAttackBonus();
 		}
 		filledSpace--;
 		emptySpace++;
