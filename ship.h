@@ -45,6 +45,6 @@ public:
 	Inventory *getInventory();
 
 	void addItem(Item);
-	void useItem(Item);
+	int useItem(Item);
 };
 #endif
