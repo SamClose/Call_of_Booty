@@ -15,16 +15,12 @@ Inventory *Ship::getInventory() { return inventory; }
 void Ship::addItem(Item item) { inventory->addItem(item); }
 
 int Ship::useItem(Item item) {
-	if(item.getItemType() == "food") {
-		return getHealth() + inventory->useItem(item);
-
-	}
-	if(item.getItemType() == "repair") {
-		return getHealth() + inventory->useItem(item);
-	}
-	if(item.getItemType() == "weapon") {
+	if(item.getItemType() == "food") 
+		return inventory->useItem(item);
+	if(item.getItemType() == "repair") 
+		return inventory->useItem(item);
+	if(item.getItemType() == "weapon") 
 		return MAX_ATTACK + inventory->useItem(item);
-	}
 }
 
 void Ship::setCrew() {
@@ -37,7 +33,7 @@ void Ship::setInventory() {
 // gives the most damage to enemy
 int Ship::explosiveCannonball() { 
 	// picks a number between MAX_ATTACK and half of ship's health
-	int n = attack + rand()%(280/2);
+	int n = attack + rand()%(218/2);
 	return n;
 }
 
