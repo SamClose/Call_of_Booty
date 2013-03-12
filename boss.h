@@ -21,8 +21,8 @@ public:
 	int slime();
 	int fireBlast();
 	int waterBlast();
-	void defend(int);
-	void tidalWave();
+	int defend(int);
+	int tidalWave();
 
 	const char *getBossName();
 	int getHealth();
