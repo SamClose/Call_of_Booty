@@ -5,7 +5,7 @@
 #include "ship.h"
 
 // assigns attribute values subject to change
-Ship::Ship() : health(MAX_HEALTH), attack(MAX_ATTACK), speed(MAX_SPEED) {}
+Ship::Ship() : health(MAX_HEALTH), attack(MAX_ATTACK), speed(MAX_SPEED) { setInventory(); }
 
 // deallocates array memory
 Ship::~Ship() { inventory->~Inventory(); }
@@ -15,12 +15,9 @@ Inventory *Ship::getInventory() { return inventory; }
 void Ship::addItem(Item item) { inventory->addItem(item); }
 
 int Ship::useItem(Item item) {
-	if(item.getItemType() == "food") 
-		return inventory->useItem(item);
-	if(item.getItemType() == "repair") 
-		return inventory->useItem(item);
 	if(item.getItemType() == "weapon") 
 		return MAX_ATTACK + inventory->useItem(item);
+	return inventory->useItem(item);
 }
 
 void Ship::setCrew() {
