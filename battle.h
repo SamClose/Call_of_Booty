@@ -6,14 +6,19 @@
 #include "allegro5\allegro_ttf.h"
 
 #include "ship.h"
+#include "sprite.h"
 
 class BattleScreen {
 private:
+	// Custom classes
 	Ship *ship;
+	Sprite *idleNessy;
+
 	// default display size
 	static const int SCREEN_WIDTH = 800;
 	static const int SCREEN_HEIGHT = 600;
-	static const int FPS = 25;
+	static const int FPS = 20;
+	static const int FPS2 = 25;
 
 	// Ship's side view sprite
 	ALLEGRO_BITMAP *player;
@@ -21,7 +26,9 @@ private:
 	ALLEGRO_BITMAP *pirate;
 	// Boss sprite
 	ALLEGRO_BITMAP *serpent;
+
 	// water background
+	// buffer drawing onto this
 	ALLEGRO_BITMAP *battleBG;
 
 	ALLEGRO_COLOR black;
@@ -34,9 +41,10 @@ private:
 	ALLEGRO_FONT *font;
 
 	ALLEGRO_TIMER *timer;
+	ALLEGRO_TIMER *timer2;
 
 	// pixels of HP bars they're technically the same length
-	int userHP, enemyHP;
+	float userHP, enemyHP;
 
 	const char *enemyName, *userName;
 
