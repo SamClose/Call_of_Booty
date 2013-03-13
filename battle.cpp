@@ -6,8 +6,8 @@
 #include <allegro5/allegro_ttf.h>
 
 #include "battleScreen.h"
-#include "enemyShip.h"
 #include "boss.h"
+#include "enemyShip.h"
 
 #include <time.h>
 #include <stdlib.h>
@@ -16,14 +16,9 @@
 BattleScreen::BattleScreen(Ship* ship) {
 	this->ship = ship;
 	userName = this->ship->getShipName();
-	//enemyName = "";
+	ship->setHealth(userHP);
 	enemyHP = 280;
 	userHP = 754;
-	this->ship->setHealth(userHP + ship->getHealth());
-	al_init_font_addon();
-	al_init_image_addon();
-	al_init_primitives_addon();
-	al_init_ttf_addon();
 
 	// Colors
 	black = al_map_rgb(0,0,0);
@@ -39,8 +34,9 @@ BattleScreen::BattleScreen(Ship* ship) {
 
 	// image
 	battleBG = al_load_bitmap("mermaid-2-blue-water.jpg");
-	if(!battleBG)
+	if(!battleBG) {
 		std::cerr << "Failed to load image. Use full path instead." << std::endl;
+	}
 
 	player = al_load_bitmap("shipProfile.png");
 	pirate = al_load_bitmap("enemyProfile.png");
@@ -60,22 +56,23 @@ BattleScreen::BattleScreen(Ship* ship) {
 	attkIter = -1;
 	iter = -1;
 	repaIter = -1;
+
 }
 
-BattleScreen::~BattleScreen() {
-	al_destroy_event_queue(eventQueue);
-	al_destroy_timer(timer);
-}
+BattleScreen::~BattleScreen() { }
 
 int BattleScreen::shipBattle() {
+
 	// create an EnemyShip object
 	EnemyShip *enemy = new EnemyShip();
+	enemy->setHealth(enemyHP);
 	enemy->setInventory();
-	enemy->setHealth(enemyHP + enemy->getHealth());
 	// randomly create a name
-	std::string enemyNames[] = {"Bojangles", "Hook", "Lil' John", "Davy Jones", "Cpt. Bewb Bosa", "BlackBeard", "WhiteBeard", "RedBeard", "Cpt. Jack Swallows" };
+	std::string enemyNames[] = {"Bojangles", "Cpt. Hook", "Lil' John", "Davy Jones",
+		"Thugnificent", "Busta Rhymes", "Cpt. ButtBosa", "BlackBeard",
+		"WhiteBeard", "RedBeard", "Cpt. Jack Swallows", "Cpt. Morgan" };
 	srand(time(NULL));
-	int name = rand()%9;
+	int name = rand()%12;
 	// assign appropriate sprite
 	this->enemyName = enemyNames[name].c_str();
 
@@ -258,25 +255,6 @@ int BattleScreen::shipBattle() {
 		if (redraw && al_is_event_queue_empty(eventQueue)) {
 			redraw = false;
 
-			// Checks Health Bars
-			if(enemyHP == 62) {
-				userTurn = false;
-				enemyTurn = false;
-				// go back to map
-				return 1;
-			}
-			else if (enemyHP > 280)
-				enemyHP = 280;
-
-			if(userHP == 528) {
-				userTurn = false;
-				enemyTurn = false;
-				// go to Game Over screen
-				return -1;
-			}
-			else if (userHP > 754)
-				userHP = 754;
-
 			// Background Image
 			al_draw_bitmap(battleBG, 0, 0, 0);
 
@@ -285,25 +263,28 @@ int BattleScreen::shipBattle() {
 
 			draw();
 
-			if(entered) {
-				al_draw_filled_rectangle(0, SCREEN_HEIGHT - 180, SCREEN_WIDTH, SCREEN_HEIGHT - 165, white);
-				al_draw_text(font, red, 260, SCREEN_HEIGHT - 176, ALLEGRO_ALIGN_CENTER, "Tip: If ENTERED! Press ENTER again."); 
-				al_draw_text(font, black, 5, SCREEN_HEIGHT - 176, ALLEGRO_ALIGN_LEFT, "ENTERED!");
+			// Checks Health Bars
+			if(enemyHP < 62)
+				enemyHP = 62;
+			if(enemyHP == 62) {
+				userTurn = false;
+				enemyTurn = false;
+				// go back to map
+				return 1;
 			}
-			else {
-				al_draw_filled_rectangle(0, SCREEN_HEIGHT - 180, SCREEN_WIDTH, SCREEN_HEIGHT - 165, white);
-				al_draw_text(font, black, 5, SCREEN_HEIGHT - 176, ALLEGRO_ALIGN_LEFT, "NOT ENTERED!");
-			}
+			if(enemyHP > 280)
+				enemyHP = 280;
 
-			// Battle Controls
-			if(iter == -1) {
-				al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, "HOW TO BATTLE: ARROW PAD to move cursor.");
-				al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, "ENTER to select, END to deselect/reset.");
-				al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "Press DOWN key to start.");
-				al_flip_display();
+			if(userHP < 528)
+				userHP = 528;
+			if(userHP == 528) {
+				userTurn = false;
+				enemyTurn = false;
+				// go to Game Over screen
+				return -1;
 			}
-
-			update();
+			if(userHP > 754)
+				userHP = 754;
 
 			if(drawn) {
 				Item item1 = ship->getInventory()->getCannonballItem();
@@ -355,6 +336,8 @@ int BattleScreen::shipBattle() {
 							}
 							std::cout << std::endl << "User Cannonball " << ship->cannonball() << std::endl;
 							enemyTurn = true;
+							update();
+							al_flip_display();
 							break;
 						case 1: // Scatter Shot
 							if (entered) {
@@ -365,6 +348,8 @@ int BattleScreen::shipBattle() {
 							}
 							std::cout << std::endl << "User Scatter Shot " << ship->scatterShot() << std::endl;
 							enemyTurn = true;
+							update();
+							al_flip_display();
 							break;
 						case 2: // Chain Shot
 							if (entered) {
@@ -375,6 +360,8 @@ int BattleScreen::shipBattle() {
 							}
 							std::cout << std::endl << "User ChainShot " << ship->chainShot() << std::endl;
 							enemyTurn = true;
+							update();
+							al_flip_display();
 							break;
 						case 3: // Explosive Cannonball
 							if (entered) {
@@ -385,11 +372,11 @@ int BattleScreen::shipBattle() {
 							}
 							std::cout << std::endl << "User Explosive Cannonball " << ship->explosiveCannonball() << std::endl;
 							enemyTurn = true;
+							update();
+							al_flip_display();
 							break;
 						}
-						update();
-						al_flip_display();
-						al_rest(.5);
+						al_rest(1);
 						userTurn = false;
 						enemyTurn = true;
 					}
@@ -404,51 +391,66 @@ int BattleScreen::shipBattle() {
 							userHP -= enemy->cannonball();
 							std::cout << std::endl << "Enemy Cannonball " << enemy->cannonball() << std::endl;
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
-							al_draw_text(font, black, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "Enemy is firing cannonballs!");
+							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "Enemy is firing cannonballs!");
+							update();
+							al_flip_display();
 							break;
 						case 1: // Chain Shot
 							userHP -= enemy->chainShot();
 							std::cout << std::endl << "Enemy Chain Shot " << enemy->chainShot() << std::endl;
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
-							al_draw_text(font, black, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "Enemy's chain shot didn't do much.");
+							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "Enemy's chain shot didn't do much.");
+							update();
+							al_flip_display();
 							break;
 						case 2: // Scatter Shot
 							userHP -= enemy->scatterShot();
 							std::cout << std::endl << "Enemy Scatter Shot " << enemy->scatterShot() << std::endl;
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
-							al_draw_text(font, black, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "Scatter shot caused some holes in your ship.");
+							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "Scatter shot caused some holes in your ship.");
+							update();
+							al_flip_display();
 							break;
 							// Healing
 						case 3:
 							enemyHP += enemy->useItem(item1);
-							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
-							al_draw_text(font, black, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "Enemy repaired ship!");
+							if(enemyHP > 280)
+								enemyHP = 280;
 							std::cout << "Enemy Healed " << enemyHP << std::endl;
+							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
+							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "Enemy repaired ship!");
+							update();
+							al_flip_display();
 							break;
 						case 4:
 							enemyHP += enemy->useItem(item2);
+							if(enemyHP > 280)
+								enemyHP = 280;
 							std::cout << std::endl << "Enemy Healed " << enemyHP << std::endl;
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
-							al_draw_text(font, black, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "Enemy repaired ship!");
+							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "Enemy repaired ship!");
+							al_flip_display();
 							break;
 						case 5:
 							enemyHP += enemy->useItem(item3);
+							if(enemyHP > 280)
+								enemyHP = 280;
 							std::cout << std::endl << "Enemy Healed " << enemyHP << std::endl;
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
-							al_draw_text(font, black, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "Enemy repaired ship!");
+							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "Enemy repaired ship!");
+							update();
+							al_flip_display();
 							break;
 						}
-						if(enemyHP > 280)
-							enemyHP = 280;
 						ship->setHealth(userHP);
+						enemy->setHealth(enemyHP);
 						std::cout << std::endl << "Enemy HP: " << enemyHP << "/280" << std::endl;
 						std::cout << "User HP: " << userHP << "/754" << std::endl;
 						update();
-						al_flip_display();
 						al_rest(1);
 						enemyTurn = false;
 					}
-					else if(!userTurn && !enemyTurn) {
+					else {
 						al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
 						al_draw_text(font, black, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "USER TURN! Select an attack.");
 						update();
@@ -478,87 +480,88 @@ int BattleScreen::shipBattle() {
 							al_draw_filled_triangle(20, SCREEN_HEIGHT - 130,
 								20, SCREEN_HEIGHT - 110,
 								40, SCREEN_HEIGHT - 120, black);
-							if(entered) {
+							if(entered && userTurn) {
 								userHP += ship->useItem(item1);
 								if(userHP > 754)
 									userHP = 754;
 								entered = false;
-								userTurn = false;
 								enemyTurn = true;
 								iter = 0;
+								std::cout << "Repair User HP: " << userHP << "/754" << std::endl;
 							}
 							break;
 						case 1: // rope
 							al_draw_filled_triangle(20, SCREEN_HEIGHT - 100,
 								20, SCREEN_HEIGHT - 80,
 								40, SCREEN_HEIGHT - 90, black);
-							if(entered) {
+							if(entered && userTurn) {
 								userHP += ship->useItem(item2);
 								if(userHP > 754)
 									userHP = 754;
 								entered = false;
 								enemyTurn = true;
 								iter = 0;
-								attkIter = 0;
+								std::cout << "Repair User HP: " << userHP << "/754" << std::endl;
 							}
 							break;
 						case 2: // tools
 							al_draw_filled_triangle(20, SCREEN_HEIGHT - 70,
 								20, SCREEN_HEIGHT - 50,
 								40, SCREEN_HEIGHT - 60, black);
-							if(entered) {
+							if(entered && userTurn) {
 								userHP += ship->useItem(item3);
 								if(userHP > 754)
 									userHP = 754;
 								entered = false;
 								enemyTurn = true;
 								iter = 0;
-								attkIter = 0;
+								std::cout << "Repair User HP: " << userHP << "/754" << std::endl;
 							}
 							break;
 						case 3: // food
 							al_draw_filled_triangle(215, SCREEN_HEIGHT - 130,
 								215, SCREEN_HEIGHT - 110,
 								235, SCREEN_HEIGHT - 120, black);
-							if(entered) {
+							if(entered && userTurn) {
 								userHP += ship->useItem(item4);
 								if(userHP > 754)
 									userHP = 754;
 								entered = false;
 								enemyTurn = true;
 								iter = 0;
-								attkIter = 0;
+								std::cout << "Repair User HP: " << userHP << "/754" << std::endl;
 							}
 							break;
 						case 4: // water
 							al_draw_filled_triangle(215, SCREEN_HEIGHT - 100,
 								215, SCREEN_HEIGHT - 80,
 								235, SCREEN_HEIGHT - 90, black);
-							if(entered) {
+							if(entered && userTurn) {
 								userHP += ship->useItem(item5);
 								if(userHP > 754)
 									userHP = 754;
 								entered = false;
 								enemyTurn = true;
 								iter = 0;
-								attkIter = 0;
+								std::cout << "Repair User HP: " << userHP << "/754" << std::endl;
 							}
 							break;
 						case 5: // booze
 							al_draw_filled_triangle(215, SCREEN_HEIGHT - 70,
 								215, SCREEN_HEIGHT - 50,
 								235, SCREEN_HEIGHT - 60, black);
-							if(entered) {
+							if(entered && userTurn) {
 								userHP += ship->useItem(item6);
 								if(userHP > 754)
 									userHP = 754;
 								entered = false;
 								enemyTurn = true;
 								iter = 0;
-								attkIter = 0;
+								std::cout << "Repair User HP: " << userHP << "/754" << std::endl;
 							}
 							break;
 						}
+						ship->setHealth(userHP);
 					}
 					break;
 				case 2: // Flee
@@ -593,45 +596,43 @@ int BattleScreen::shipBattle() {
 					al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, "HOW TO BATTLE: WASD keys to move cursor.");
 					al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, "ENTER to select, END to deselect/reset.");
 					break;
-				}	
-				al_flip_display();
+				}
 			}
 		}
+		al_flip_display();
 	}
 	return 1;
 }
 
 int BattleScreen::bossBattle() {
 	// create Boss object
-	Boss Nessy = Boss();
-	Nessy.setBossName("Nessy");
-	this->enemyName = Nessy.getBossName();
-	enemyHP = Nessy.getHealth();
+	Boss *Nessy = new Boss();
+	Nessy->setBossName("Nessy");
+	this->enemyName = Nessy->getBossName();
+
+	// Boss Idle
+	idleNessy = new Sprite();
+	idleNessy->sprite(serpent, 6, 240, 200, 6);
 
 	timer = al_create_timer(1.0/FPS);
+	timer2 = al_create_timer(1.0/FPS2);
 	ALLEGRO_EVENT_QUEUE *eventQueue = al_create_event_queue();
 	al_install_keyboard();
 	al_register_event_source(eventQueue, al_get_keyboard_event_source());
 	al_register_event_source(eventQueue, al_get_timer_event_source(timer));
+	al_register_event_source(eventQueue, al_get_timer_event_source(timer2));
 
 	int num;
-	
-	// Idle boss sprite animation
-	int currentIdleFrame = 0;
-	int idleFrameCount = 0;
-	int idleFrameDelay = 5;
-
 	al_start_timer(timer);
+	al_start_timer(timer2);
 	while(!done) {
 		ALLEGRO_EVENT action;
 		al_wait_for_event(eventQueue, &action);
 		if(action.type == ALLEGRO_EVENT_TIMER) {
-			redraw = true;
-			if(++idleFrameCount >= idleFrameDelay) {
-				if(++currentIdleFrame >= 6)
-					currentIdleFrame = 0;
-				idleFrameCount = 0;
-			}
+			if(action.timer.source == timer)
+				redraw = true;
+			if(action.timer.source == timer2)
+				idleNessy->update();
 		}
 		if(action.type == ALLEGRO_EVENT_KEY_DOWN) {
 			switch(action.keyboard.keycode) {
@@ -795,53 +796,39 @@ int BattleScreen::bossBattle() {
 			}
 		}
 		if(redraw && al_is_event_queue_empty(eventQueue)) {
+			// draw onto the BITMAP
 			redraw = false;
 
+			// Background Image
+			al_draw_bitmap(battleBG, 0, 0, 0);
+
+			// Nessy's beautiful mug
+			idleNessy->draw();
+
+			draw();
+
 			// Checks Health Bars
+			if(enemyHP < 62)
+				enemyHP = 62;
 			if(enemyHP == 62) {
 				userTurn = false;
 				enemyTurn = false;
 				// go back to map
 				return 1;
 			}
-			else if (enemyHP > 280)
+			if(enemyHP > 280)
 				enemyHP = 280;
 
+			if(userHP < 528)
+				userHP = 528;
 			if(userHP == 528) {
 				userTurn = false;
 				enemyTurn = false;
 				// go to Game Over screen
 				return -1;
 			}
-			else if (userHP > 754)
+			if(userHP > 754)
 				userHP = 754;
-
-			// Background Image
-			al_draw_bitmap(battleBG, 0, 0, 0);
-
-			// Nessy's beautiful mug
-			al_draw_bitmap_region(serpent, currentIdleFrame*240, 0, 240, 200, SCREEN_WIDTH - 350, 30, NULL);
-
-			draw();
-
-			// notifies if it has been selected
-			if(entered) {
-				al_draw_filled_rectangle(0, SCREEN_HEIGHT - 180, SCREEN_WIDTH, SCREEN_HEIGHT - 165, white);
-				al_draw_text(font, red, 260, SCREEN_HEIGHT - 176, ALLEGRO_ALIGN_CENTER, "Tip: If ENTERED! Press ENTER again."); 
-				al_draw_text(font, black, 5, SCREEN_HEIGHT - 176, ALLEGRO_ALIGN_LEFT, "ENTERED!");
-			}
-			else {
-				al_draw_filled_rectangle(0, SCREEN_HEIGHT - 180, SCREEN_WIDTH, SCREEN_HEIGHT - 165, white);
-				al_draw_text(font, black, 5, SCREEN_HEIGHT - 176, ALLEGRO_ALIGN_LEFT, "NOT ENTERED!");
-			}
-
-			// Battle Screen Controls
-			if(iter == -1) {
-				al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, "HOW TO BATTLE: ARROW PAD to move cursor.");
-				al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, "ENTER to select, END to deselect/reset.");
-				al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "Press DOWN key to start.");
-				al_flip_display();
-			}
 
 			if(drawn) {
 				switch(iter) {
@@ -889,6 +876,8 @@ int BattleScreen::bossBattle() {
 							}
 							std::cout << std::endl << "User Cannonball " << ship->cannonball() << std::endl;
 							enemyTurn = true;
+							update();
+							al_flip_display();
 							break;
 						case 1: // Scatter Shot
 							if (entered) {
@@ -899,6 +888,8 @@ int BattleScreen::bossBattle() {
 							}
 							std::cout << std::endl << "User Scatter Shot " << ship->scatterShot() << std::endl;
 							enemyTurn = true;
+							update();
+							al_flip_display();
 							break;
 						case 2: // Chain Shot
 							if (entered) {
@@ -909,6 +900,8 @@ int BattleScreen::bossBattle() {
 							}
 							std::cout << std::endl << "User ChainShot " << ship->chainShot() << std::endl;
 							enemyTurn = true;
+							update();
+							al_flip_display();
 							break;
 						case 3: // Explosive Cannonball
 							if (entered) {
@@ -919,10 +912,11 @@ int BattleScreen::bossBattle() {
 							}
 							std::cout << std::endl << "User Explosive Cannonball " << ship->explosiveCannonball() << std::endl;
 							enemyTurn = true;
+							update();
+							al_flip_display();
 							break;
 						}
-						update();
-						al_rest(0.5);
+						al_rest(1.5);
 						userTurn = false;
 						enemyTurn = true;
 					}
@@ -931,44 +925,55 @@ int BattleScreen::bossBattle() {
 						srand(time(NULL));
 						int n = rand()%6;
 						switch(n) {
-						case 0:
-							userHP -= Nessy.bite();
+						case 0: // bite
+							userHP -= Nessy->bite();
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
 							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "BOSS USED BITE!");
+							update();
+							al_flip_display();
 							break;
-						case 1:
-							userHP -= Nessy.slime();
+						case 1: // slime
+							userHP -= Nessy->slime();
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
 							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "BOSS USED SLIME!");
+							update();
+							al_flip_display();
 							break;
-						case 2:
-							userHP -= Nessy.fireBlast();
+						case 2: // fireBlast
+							userHP -= Nessy->fireBlast();
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
 							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "BOSS USED FIREBLAST!");
+							update();
+							al_flip_display();
 							break;
-						case 3:
-							userHP -= Nessy.waterBlast();
+						case 3: // waterBlast
+							userHP -= Nessy->waterBlast();
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
 							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "BOSS USED WATERBLAST!");
+							update();
+							al_flip_display();
 							break;
-						case 4:
-							enemyHP += Nessy.defend(ship->getAttack());
+						case 4: // defend
+							enemyHP += Nessy->defend(ship->getAttack());
+							if(enemyHP > 280)
+								enemyHP = 280;
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
 							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "BOSS USED DEFEND!");
+							update();
+							al_flip_display();
 							break;
-						case 5:
-							enemyHP += Nessy.tidalWave();
+						case 5: // tidalWave
+							enemyHP += Nessy->tidalWave();
+							if(enemyHP > 280)
+								enemyHP = 280;
 							al_draw_filled_rectangle(0, SCREEN_HEIGHT - 200, SCREEN_WIDTH, SCREEN_HEIGHT - 185, white);
 							al_draw_text(font, red, 5, SCREEN_HEIGHT - 196, ALLEGRO_ALIGN_LEFT, "BOSS USED TIDALWAVE!");
+							update();
+							al_flip_display();
 							break;
 						}
-						if(enemyHP > 280)
-							enemyHP = 280;
-						ship->setHealth(userHP);
 						std::cout << std::endl << "Enemy HP: " << enemyHP << "/280" << std::endl;
 						std::cout << "User HP: " << userHP << "/754" << std::endl;
-						update();
-						al_flip_display();
 						al_rest(1);
 						enemyTurn = false;
 					}
@@ -1007,9 +1012,9 @@ int BattleScreen::bossBattle() {
 								if(userHP > 754)
 									userHP = 754;
 								entered = false;
-								userTurn = false;
 								enemyTurn = true;
 								iter = 0;
+								std::cout << "Repair User HP: " << ship->useItem(item1) << "/754" << std::endl;
 							}
 							break;
 						case 1: // rope
@@ -1023,7 +1028,7 @@ int BattleScreen::bossBattle() {
 								entered = false;
 								enemyTurn = true;
 								iter = 0;
-								attkIter = 0;
+								std::cout << "Repair User HP: " << ship->useItem(item2) << "/754" << std::endl;
 							}
 							break;
 						case 2: // tools
@@ -1037,7 +1042,7 @@ int BattleScreen::bossBattle() {
 								entered = false;
 								enemyTurn = true;
 								iter = 0;
-								attkIter = 0;
+								std::cout << "Repair User HP: " << ship->useItem(item3) << "/754" << std::endl;
 							}
 							break;
 						case 3: // food
@@ -1051,7 +1056,7 @@ int BattleScreen::bossBattle() {
 								entered = false;
 								enemyTurn = true;
 								iter = 0;
-								attkIter = 0;
+								std::cout << "Repair User HP: " << ship->useItem(item4) << "/754" << std::endl;
 							}
 							break;
 						case 4: // water
@@ -1065,7 +1070,7 @@ int BattleScreen::bossBattle() {
 								entered = false;
 								enemyTurn = true;
 								iter = 0;
-								attkIter = 0;
+								std::cout << "Repair User HP: " << ship->useItem(item5) << "/754" << std::endl;
 							}
 							break;
 						case 5: // booze
@@ -1079,10 +1084,11 @@ int BattleScreen::bossBattle() {
 								entered = false;
 								enemyTurn = true;
 								iter = 0;
-								attkIter = 0;
+								std::cout << "Repair User HP: " << ship->useItem(item6) << "/754" << std::endl;
 							}
 							break;
 						}
+						userTurn = true;
 					}
 					break;
 				case 2: // Flee
@@ -1118,14 +1124,14 @@ int BattleScreen::bossBattle() {
 					al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, "ENTER to select, END to deselect/reset.");
 					break;
 				}
-				al_flip_display();
 			}
 		}
+		al_flip_display();
 	}
 	return 1;
 }
 
-void BattleScreen::draw() { 
+void BattleScreen::draw() {
 	// Ship
 	al_draw_bitmap(player, 50, SCREEN_HEIGHT - 440, 0);
 
@@ -1147,7 +1153,25 @@ void BattleScreen::draw() {
 	al_draw_text(font, black, SCREEN_WIDTH - 130, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, "EXIT GAME");
 	al_draw_text(font, black, SCREEN_WIDTH - 130, SCREEN_HEIGHT - 85, ALLEGRO_ALIGN_LEFT, "HOW TO PLAY");
 
-	al_flip_display();
+	// notifies if it has been selected
+	if(entered) {
+		al_draw_filled_rectangle(0, SCREEN_HEIGHT - 180, SCREEN_WIDTH, SCREEN_HEIGHT - 165, white);
+		al_draw_text(font, red, 260, SCREEN_HEIGHT - 176, ALLEGRO_ALIGN_CENTER, "Tip: If ENTERED! Press ENTER again."); 
+		al_draw_text(font, black, 5, SCREEN_HEIGHT - 176, ALLEGRO_ALIGN_LEFT, "ENTERED!");
+	}
+	else {
+		al_draw_filled_rectangle(0, SCREEN_HEIGHT - 180, SCREEN_WIDTH, SCREEN_HEIGHT - 165, white);
+		al_draw_text(font, black, 5, SCREEN_HEIGHT - 176, ALLEGRO_ALIGN_LEFT, "NOT ENTERED!");
+	}
+
+	// Battle Screen Controls
+	if(iter == -1) {
+		al_draw_text(font, black, 40, SCREEN_HEIGHT - 125, ALLEGRO_ALIGN_LEFT, "HOW TO BATTLE: ARROW PAD to move cursor.");
+		al_draw_text(font, black, 40, SCREEN_HEIGHT - 95, ALLEGRO_ALIGN_LEFT, "ENTER to select, END to deselect/reset.");
+		al_draw_text(font, black, 40, SCREEN_HEIGHT - 65, ALLEGRO_ALIGN_LEFT, "Press DOWN key to start.");
+
+	}
+	update();
 }
 
 void BattleScreen::update() {
@@ -1174,6 +1198,4 @@ void BattleScreen::update() {
 	al_draw_filled_rectangle(SCREEN_WIDTH - 300, SCREEN_HEIGHT - 195, SCREEN_WIDTH - 272, SCREEN_HEIGHT - 185, black);
 	al_draw_rounded_rectangle(SCREEN_WIDTH - 300, SCREEN_HEIGHT - 195, SCREEN_WIDTH - 45, SCREEN_HEIGHT - 185, 2, 2, black, 2);
 	al_draw_text(font, white, SCREEN_WIDTH - 295, SCREEN_HEIGHT - 194, ALLEGRO_ALIGN_LEFT, "HP");
-
-	al_flip_display();
 }
