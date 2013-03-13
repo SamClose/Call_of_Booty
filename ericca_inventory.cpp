@@ -4,41 +4,83 @@
 #include <time.h>
 #include <stdlib.h>
 
-Inventory::Inventory() : filledSpace(0), emptySpace(MAX_SPACE) {
+Inventory::Inventory() : filledSpace(0), emptySpace(MAX_SPACE) { setItems(); }
+
+Inventory::~Inventory() {}
+
+void Inventory::setItems() {
 	// creating items
 	food.setItemName("FOOD");
 	food.setItemType("food");
+
 	water.setItemName("WATER");
 	water.setItemType("food");
+
 	booze.setItemName("BOOZE");
 	booze.setItemType("food");
+
 	wood.setItemName("WOOD");
 	wood.setItemType("repair");
+
 	tools.setItemName("TOOLS");
 	tools.setItemType("repair");
+
 	rope.setItemName("ROPE");
 	rope.setItemType("repair");
+
 	cannonballItem.setItemName("CANNONBALL");
 	cannonballItem.setItemType("weapon");
+
 	chainShotItem.setItemName("CHAINSHOT");
 	chainShotItem.setItemType("weapon");
+
 	scatterShotItem.setItemName("SCATTERSHOT");
 	scatterShotItem.setItemType("weapon");
+
 	explosiveCannonballItem.setItemName("EXP. CANNONBALL");
 	explosiveCannonballItem.setItemType("weapon");
-	// setting bonuses
-	food.setHealthBonus(5);
-	water.setHealthBonus(5);
-	booze.setSpeedBonus(10);
-	wood.setHealthBonus(10);
-	tools.setAttackBonus(5);
-	rope.setHealthBonus(3);
-	cannonballItem.setAttackBonus(10);
-	chainShotItem.setSpeedBonus(5);
-	scatterShotItem.setAttackBonus(7);
-}
 
-Inventory::~Inventory() {}
+	// setting bonuses
+	food.setHealthBonus(15);
+	food.setAttackBonus(0);
+	food.setSpeedBonus(0);
+
+	water.setHealthBonus(10);
+	water.setAttackBonus(0);
+	water.setSpeedBonus(0);
+
+	booze.setHealthBonus(100);
+	booze.setAttackBonus(20);
+	booze.setSpeedBonus(0);
+
+	wood.setHealthBonus(15);
+	wood.setAttackBonus(0);
+	wood.setSpeedBonus(0);
+
+	tools.setHealthBonus(5);
+	tools.setAttackBonus(5);
+	tools.setSpeedBonus(0);
+
+	rope.setHealthBonus(60);
+	rope.setAttackBonus(0);
+	rope.setSpeedBonus(0);
+
+	cannonballItem.setHealthBonus(0);
+	cannonballItem.setAttackBonus(10);
+	cannonballItem.setSpeedBonus(0);
+
+	chainShotItem.setHealthBonus(0);
+	chainShotItem.setAttackBonus(5);
+	chainShotItem.setSpeedBonus(5);
+
+	scatterShotItem.setHealthBonus(3);
+	scatterShotItem.setAttackBonus(7);
+	scatterShotItem.setSpeedBonus(0);
+
+	explosiveCannonballItem.setHealthBonus(0);
+	explosiveCannonballItem.setAttackBonus(0);
+	explosiveCannonballItem.setSpeedBonus(0);
+}
 
 void Inventory::addItem(Item item) {
 	if(filledSpace != MAX_SPACE) {
@@ -88,7 +130,6 @@ void Inventory::addItem(Item item) {
 }
 
 int Inventory::useItem(Item item) {
-	if (filledSpace > 0) {
 		if(item.getItemType() == "repair") {
 			return item.getHealthBonus();
 			inventorySpace[0]--;
@@ -113,10 +154,9 @@ int Inventory::useItem(Item item) {
 			}
 			return item.getAttackBonus();
 		}
+		return item.getHealthBonus();
 		filledSpace--;
 		emptySpace++;
-	}
-	return 0;
 }
 
 // Getters and setters for private attributes
